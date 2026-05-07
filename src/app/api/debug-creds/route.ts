@@ -2,7 +2,28 @@ import { NextRequest, NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
+/**
+ * SECURITY NOTICE:
+ * This API was used for debugging environment variables on the server.
+ * It has been DISABLED because it exposes sensitive private keys (GOOGLE_SERVICE_ACCOUNT_JSON).
+ * 
+ * Do NOT enable this in a production environment.
+ */
+
 export async function GET(req: NextRequest) {
+  return NextResponse.json(
+    { 
+      error: "Access Denied", 
+      message: "This debugging endpoint has been disabled for security reasons. Private keys are no longer exposed." 
+    }, 
+    { status: 403 }
+  );
+}
+
+/* 
+// ORIGINAL DEBUGGING CODE (Commented out for safety)
+
+export async function GET_DISABLED(req: NextRequest) {
   const rawJson = process.env.GOOGLE_SERVICE_ACCOUNT_JSON ?? "";
   
   // Individual variables
@@ -62,3 +83,4 @@ export async function GET(req: NextRequest) {
 
   return NextResponse.json(debugInfo, { status: 200 });
 }
+*/

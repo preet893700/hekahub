@@ -710,6 +710,8 @@ export function Register({
                 onChange={(v) => setForm((p) => ({ ...p, programType: v }))}
                 options={[
                   { value: "bootcamp", label: "Summer Bootcamp" },
+                  { value: "weekday", label: "Weekday Batch" },
+                  { value: "weekend", label: "Weekend Batch" },
                   { value: "annual", label: "Annual Membership" },
                 ]}
                 placeholder="Select program"
@@ -718,16 +720,12 @@ export function Register({
             </Field>
 
             <Field id="reg-batch" label="Preferred Batch Timing *">
-              <CustomDropdown
+              <Input
                 id="reg-batch"
-                value={form.batchTiming}
-                onChange={(v) => setForm((p) => ({ ...p, batchTiming: v }))}
-                options={batchOptions.map((b) => ({
-                  value: b.value,
-                  label: b.label,
-                  sublabel: b.sublabel,
-                }))}
-                placeholder="Select a batch"
+                type="text"
+                placeholder="e.g. Evenings, Weekends, 5PM IST"
+                value={form.batchTiming || ""}
+                onChange={setField("batchTiming")}
                 required
               />
             </Field>

@@ -5,16 +5,11 @@ import { appendRegistration } from "@/lib/sheets";
 
 export const dynamic = "force-dynamic";
 
-const BATCH_LABELS: Record<string, string> = {
-  us: "USA Batch",
-  india: "India Batch",
-  uk: "UK Batch",
-  other: "Request a batch",
-};
-
 const PROGRAM_LABELS: Record<string, string> = {
   bootcamp: "Summer Bootcamp",
   annual: "Annual Membership",
+  weekday: "Weekday Batch",
+  weekend: "Weekend Batch",
 };
 
 const registerSchema = z.object({
@@ -25,8 +20,8 @@ const registerSchema = z.object({
   city: z.string().max(100).optional().transform((v) => v?.trim() || ""),
   studentName: z.string().min(2).max(100).trim(),
   grade: z.string().min(1),
-  programType: z.enum(["bootcamp", "annual"]),
-  batchTiming: z.enum(["us", "india", "uk", "other"]),
+  programType: z.enum(["bootcamp", "annual", "weekday", "weekend"]),
+  batchTiming: z.string().min(1).max(200).trim(),
   referralSource: z.enum(["Social Media", "School", "Friend", "Ads", "Other"]),
   referralName: z.string().max(100).optional().transform((v) => v?.trim() || ""),
   consentUpdates: z.literal(true),
@@ -79,7 +74,7 @@ export async function POST(req: NextRequest) {
     data.city,                              // D: City / Location
     data.studentName,                       // E: Student's Full Name
     PROGRAM_LABELS[data.programType],       // F: Program Type
-    BATCH_LABELS[data.batchTiming],         // G: Preferred Batch Timing
+    data.batchTiming,                       // G: Preferred Batch Timing
     data.grade,                             // H: Grade
     data.referralSource,                    // I: How did you hear about us?
     data.referralName,                      // J: Referral Name
