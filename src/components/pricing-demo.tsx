@@ -20,12 +20,19 @@ export default function PricingDemo() {
         "Weekly newsletter",
         "Completion reward kit",
         "Certificate of completion",
+        "Free trial classes upon request"
       ],
       originalPrice: "1,999",
       earlyBirdPrice: "600",
       registrationFee: "99",
       buttonText: "ENROLL NOW",
       isPopular: false,
+      subPrices: [
+        { price: " 25", unit: "/ 4 hour class" },
+        { price: " 100", unit: "/ week" },
+        { price: " 350", unit: "/ month" },
+        { price: " 600", unit: "/ bootcamp", originalPrice: "1,999" },
+      ],
     },
     {
       name: "Annual Membership",

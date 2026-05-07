@@ -17,6 +17,11 @@ export interface PricingPlan {
   earlyBirdPrice: string;
   registrationFee: string;
   buttonText: string;
+  subPrices?: {
+    price: string;
+    unit: string;
+    originalPrice?: string;
+  }[];
 }
 
 export interface BespokePlan {
@@ -161,67 +166,127 @@ export function Pricing({
                   <span style={{ fontSize: '0.6rem', color: '#ff4500', fontWeight: 600, letterSpacing: '1px' }}>(ACTIVE)</span>
                 )}
               </h3>
-            <p style={{ color: 'var(--color-text-muted)', marginTop: '0.6rem', fontSize: '0.8rem', paddingBottom: '1rem', borderBottom: '1px solid #222' }}>
-              {plan.description}
-            </p>
+              <p style={{ color: 'var(--color-text-muted)', marginTop: '0.6rem', fontSize: '0.8rem', paddingBottom: '1rem', borderBottom: '1px solid #222' }}>
+                {plan.description}
+              </p>
+            </div>
+
+            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.55rem', color: '#ccc', padding: 0, fontSize: '0.875rem' }}>
+              {plan.features.map((feature, fIdx) => (
+                <li key={fIdx}>
+                  <span style={{ color: '#ff4500', marginRight: '0.5rem' }}>+</span> {feature}
+                </li>
+              ))}
+            </ul>
+
+            <div style={{ marginTop: 'auto', paddingTop: '0.5rem', borderTop: '1px solid #222' }}>
+              {/* One line space for future content */}
+              <div style={{ height: '1.5rem' }} />
+
+              {/* Early Bird Badge */}
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', backgroundColor: 'rgba(255,69,0,0.08)', border: '1px solid rgba(255,69,0,0.3)', borderRadius: '999px', padding: '0.2rem 0.65rem', marginBottom: '0.7rem' }}>
+                <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#ff4500', display: 'inline-block' }} />
+                <span style={{ fontSize: '0.6rem', color: '#ff4500', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', fontFamily: 'var(--font-inter)' }}>Early Bird Offer</span>
+              </div>
+
+              {plan.subPrices ? (
+                <div style={{
+                  marginTop: '0.5rem',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '0.6rem',
+                  marginBottom: '1rem'
+                }}>
+                  {plan.subPrices.map((sub, sIdx) => (
+                    <div key={sIdx} style={{
+                      display: 'flex',
+                      alignItems: 'baseline',
+                      gap: '0.4rem',
+                      color: '#fff',
+                      fontFamily: 'var(--font-inter)',
+                      lineHeight: 1
+                    }}>
+                      <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.3rem' }}>
+                        <span style={{ fontSize: '0.9rem', fontWeight: 700 }}>$</span>
+                        <span style={{ fontWeight: 700, fontSize: '1.75rem', letterSpacing: '0.05em' }}>{sub.price.trim()}</span>
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginLeft: '0.2rem' }}>
+                        <span style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', fontWeight: 400 }}>
+                          {sub.unit}
+                        </span>
+                        {sub.originalPrice && (
+                          <span style={{
+                            fontSize: '0.9rem',
+                            color: '#444',
+                            textDecoration: 'line-through',
+                            fontWeight: 400,
+                            fontFamily: 'var(--font-inter)'
+                          }}>
+                            ${sub.originalPrice}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+
+                  {/* Registration fee for Summer Bootcamp */}
+                  <div style={{ fontSize: '0.78rem', color: '#555', fontFamily: 'var(--font-inter)', marginTop: '0.5rem' }}>
+                    + <span style={{ color: '#888' }}>${plan.registrationFee}</span> registration fee
+                  </div>
+                </div>
+              ) : (
+                <>
+                  {/* Early bird price */}
+                  <div style={{ fontSize: '3.5rem', fontFamily: 'var(--font-inter)', fontWeight: 700, color: '#fff', display: 'flex', alignItems: 'baseline', gap: '0.4rem', lineHeight: 1 }}>
+                    <span style={{ fontSize: '1.5rem' }}>$</span>
+                    {plan.earlyBirdPrice}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginLeft: '0.2rem' }}>
+                      <span style={{ fontSize: '1rem', color: 'var(--color-text-muted)', fontWeight: 400 }}>
+                        / {plan.name.toLowerCase().includes("bootcamp") ? "bootcamp" : "seat"}
+                      </span>
+                      <span style={{
+                        fontSize: '1.1rem',
+                        color: '#444',
+                        textDecoration: 'line-through',
+                        fontWeight: 400,
+                        fontFamily: 'var(--font-inter)'
+                      }}>
+                        ${plan.originalPrice}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Registration fee */}
+                  <div style={{ fontSize: '0.78rem', color: '#555', fontFamily: 'var(--font-inter)', marginTop: '0.35rem', marginBottom: '1rem' }}>
+                    + <span style={{ color: '#888' }}>${plan.registrationFee}</span> registration fee
+                  </div>
+                </>
+              )}
+
+              <button
+                onClick={() => {
+                  if (plan.name.toLowerCase().includes("weekly")) handleWhatsApp("weekly");
+                  else handleEnroll();
+                }}
+                style={{
+                  width: '100%',
+                  padding: '1.25rem',
+                  borderRadius: '999px',
+                  backgroundColor: isCurrentlyHighlighted ? '#111' : '#1a1a1a',
+                  border: '1px solid #222',
+                  color: '#ff4500',
+                  fontSize: '0.75rem',
+                  fontWeight: 600,
+                  letterSpacing: '1px',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s'
+                }} className="hover:border-[#ff4500]/50 hover:bg-[#222]">
+                {plan.buttonText}
+              </button>
+            </div>
           </div>
-
-          <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.55rem', color: '#ccc', padding: 0, fontSize: '0.875rem' }}>
-            {plan.features.map((feature, fIdx) => (
-              <li key={fIdx}>
-                <span style={{ color: '#ff4500', marginRight: '0.5rem' }}>+</span> {feature}
-              </li>
-            ))}
-          </ul>
-
-          <div style={{ marginTop: 'auto', paddingTop: '1.25rem', borderTop: '1px solid #222' }}>
-
-            {/* Early Bird Badge */}
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', backgroundColor: 'rgba(255,69,0,0.08)', border: '1px solid rgba(255,69,0,0.3)', borderRadius: '999px', padding: '0.2rem 0.65rem', marginBottom: '0.6rem' }}>
-              <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#ff4500', display: 'inline-block' }} />
-              <span style={{ fontSize: '0.6rem', color: '#ff4500', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', fontFamily: 'var(--font-inter)' }}>Early Bird Offer</span>
-            </div>
-
-            {/* Strikethrough original price */}
-            <div style={{ fontSize: '0.95rem', color: '#444', fontFamily: 'var(--font-inter)', textDecoration: 'line-through', marginBottom: '0.25rem' }}>
-              ${plan.originalPrice}
-            </div>
-
-            {/* Early bird price */}
-            <div style={{ fontSize: '3rem', fontFamily: 'var(--font-inter)', fontWeight: 700, color: '#fff', display: 'flex', alignItems: 'flex-end', gap: '0.4rem', lineHeight: 1 }}>
-              <span style={{ fontSize: '1.5rem', marginBottom: '0.4rem' }}>$</span>
-              {plan.earlyBirdPrice}
-              <span style={{ fontSize: '1rem', color: 'var(--color-text-muted)', fontWeight: 400, marginBottom: '0.3rem' }}> / seat</span>
-            </div>
-
-            {/* Registration fee */}
-            <div style={{ fontSize: '0.78rem', color: '#555', fontFamily: 'var(--font-inter)', marginTop: '0.35rem', marginBottom: '1rem' }}>
-              + <span style={{ color: '#888' }}>${plan.registrationFee}</span> registration fee
-            </div>
-
-            <button
-              onClick={() => {
-                if (plan.name.toLowerCase().includes("weekly")) handleWhatsApp("weekly");
-                else handleEnroll();
-              }}
-              style={{
-                width: '100%',
-                padding: '1.25rem',
-                borderRadius: '999px',
-                backgroundColor: isCurrentlyHighlighted ? '#111' : '#1a1a1a',
-                border: '1px solid #222',
-                color: '#ff4500',
-                fontSize: '0.75rem',
-                fontWeight: 600,
-                letterSpacing: '1px',
-                cursor: 'pointer',
-                transition: 'all 0.3s'
-              }} className="hover:border-[#ff4500]/50 hover:bg-[#222]">
-              {plan.buttonText}
-            </button>
-          </div>
-        </div>
-      )})}
+        )
+      })}
 
 
     </div>
