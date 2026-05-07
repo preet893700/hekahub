@@ -1,0 +1,73 @@
+"use client";
+
+import { Register } from "@/components/ui/register";
+
+// ─────────────────────────────────────────────
+// All copy / config lives here — edit freely
+// ─────────────────────────────────────────────
+export default function RegisterDemo() {
+  return (
+    <Register
+      label="SUMMER BOOTCAMP FOR 2026"
+      title="Register for Summer CLASSES (Age 10-15)"
+      subtitle="Secure your spot in our 8-week AI Bootcamp. Fill in the details below and we'll reach out to confirm your enrollment."
+      gradeOptions={["4", "5", "6", "7", "8", "9", "Other"]}
+      batchOptions={[
+        {
+          value: "us",
+          label: "USA Batch",
+          sublabel: "10:30 AM – 2:30 PM CST  ·  4:30 PM – 8:30 PM BST",
+        },
+        {
+          value: "india",
+          label: "India Batch",
+          sublabel: "10:30 AM – 2:30 PM IST  ·  6:00 AM – 10:00 AM BST",
+        },
+        {
+          value: "uk",
+          label: "UK Batch",
+          sublabel: "10:30 AM – 2:30 PM BST  ·  3:00 PM – 7:00 PM IST",
+        },
+        {
+          value: "other",
+          label: "Request a batch",
+          sublabel: "Connect with us over call to discuss best time for your group.",
+        },
+      ]}
+      referralOptions={["Social Media", "School", "Friend", "Ads", "Other"]}
+      consentText="I agree to receive updates regarding the program"
+      submitLabel="ENROLL IN PROGRAM"
+      successMessage="🎉 Your request for registration is received! We'll contact you shortly."
+      toastPrerequisite="💻 A laptop is mandatory for this hands-on bootcamp. Please ensure your child has access to one before the program begins."
+      contactInfo={{
+        email: "register@hekahub.com",
+        phone: "+91 92353 27048",
+      }}
+      onSubmit={async (data) => {
+
+        const res = await fetch("/api/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            ...data,
+            website: "", // honeypot field — always empty for real users
+          }),
+        });
+
+        if (!res.ok) {
+          let errorMessage = "Registration failed";
+          try {
+            const err = await res.json();
+            errorMessage = err.error ?? errorMessage;
+          } catch (e) {
+            // If JSON parsing fails, it's likely an HTML error page from the server
+            const text = await res.text();
+            console.error("Server returned non-JSON response:", text);
+            errorMessage = `Server Error (${res.status}): Please check if the API route is working.`;
+          }
+          throw new Error(errorMessage);
+        }
+      }}
+    />
+  );
+}
