@@ -230,49 +230,49 @@ const Chatbot = () => {
               "bg-[#0a0a0a] border border-[#ff4500]/20 rounded-3xl shadow-2xl overflow-hidden flex flex-col pointer-events-auto",
               isFullPage
                 ? "fixed inset-4 md:inset-10 z-[10000]"
-                : "w-[90vw] sm:w-[400px] h-[650px] mb-4 origin-bottom-right"
+                : "w-[85vw] sm:w-[400px] h-[60vh] max-h-[500px] sm:h-[600px] sm:max-h-[600px] mb-4 origin-bottom-right"
             )}
           >
             {/* Header */}
-            <div className="p-4 border-b border-white/5 bg-gradient-to-r from-[#ff4500]/10 to-transparent flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-14 h-14 flex items-center justify-center relative">
-                  <AnimatedBotIcon className="w-12 h-12 text-[#ff4500] relative z-10 drop-shadow-[0_0_5px_rgba(255,69,0,0.3)]" isStatic />
+            <div className="p-3 sm:p-4 border-b border-white/5 bg-gradient-to-r from-[#ff4500]/10 to-transparent flex items-center justify-between">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <div className="w-10 h-10 sm:w-14 sm:h-14 flex items-center justify-center relative">
+                  <AnimatedBotIcon className="w-8 h-8 sm:w-12 sm:h-12 text-[#ff4500] relative z-10 drop-shadow-[0_0_5px_rgba(255,69,0,0.3)]" isStatic />
                 </div>
                 <div className="flex flex-col justify-center">
-                  <h3 className="text-white font-bebas text-xl tracking-wider m-0 leading-none mb-1">HekaBot</h3>
+                  <h3 className="text-white font-bebas text-lg sm:text-xl tracking-wider m-0 leading-none mb-1">HekaBot</h3>
                   <div className="flex items-center gap-1.5">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                    <span className="text-[10px] text-emerald-500 uppercase font-bold tracking-widest">Online</span>
+                    <span className="text-[9px] sm:text-[10px] text-emerald-500 uppercase font-bold tracking-widest">Online</span>
                   </div>
                 </div>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1 sm:gap-2">
                 <button
                   onClick={() => setIsFullPage(!isFullPage)}
-                  className="p-2 text-zinc-500 hover:text-white transition-colors"
+                  className="p-1.5 sm:p-2 text-zinc-500 hover:text-white transition-colors"
                 >
-                  {isFullPage ? <Minimize2 size={18} /> : <Maximize2 size={18} />}
+                  {isFullPage ? <Minimize2 size={16} className="sm:w-[18px] sm:h-[18px]" /> : <Maximize2 size={16} className="sm:w-[18px] sm:h-[18px]" />}
                 </button>
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="p-2 text-zinc-500 hover:text-white transition-colors"
+                  className="p-1.5 sm:p-2 text-zinc-500 hover:text-white transition-colors"
                 >
-                  <X size={20} />
+                  <X size={18} className="sm:w-[20px] sm:h-[20px]" />
                 </button>
               </div>
             </div>
 
             {/* Tags area */}
             <div className={cn(
-              "p-3 bg-white/5 border-b border-white/5 flex flex-wrap gap-2 overflow-hidden",
-              !isFullPage ? "max-h-[122px]" : ""
+              "p-2 sm:p-3 bg-white/5 border-b border-white/5 flex gap-2",
+              !isFullPage ? "flex-nowrap overflow-x-auto sm:flex-wrap sm:overflow-hidden sm:max-h-[122px] custom-scrollbar pb-3 sm:pb-3" : "flex-wrap"
             )}>
               {faqMap.map((item) => (
                 <button
                   key={item.id}
                   onClick={() => handleTagClick(item)}
-                  className="whitespace-nowrap px-3 py-1.5 rounded-full bg-zinc-900 border border-white/10 text-xs text-zinc-300 hover:border-[#ff4500]/50 hover:text-[#ff4500] transition-all"
+                  className="whitespace-nowrap px-3 py-1.5 rounded-full bg-zinc-900 border border-white/10 text-[11px] sm:text-xs text-zinc-300 hover:border-[#ff4500]/50 hover:text-[#ff4500] transition-all shrink-0"
                 >
                   {item.label}
                 </button>
@@ -280,7 +280,7 @@ const Chatbot = () => {
             </div>
 
             {/* Chat Content */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar">
+            <div className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-3 sm:space-y-4 custom-scrollbar">
               {messages.map((msg, i) => (
                 <motion.div
                   initial={{ opacity: 0, y: 10, scale: 0.95 }}
@@ -292,26 +292,26 @@ const Chatbot = () => {
                   )}
                 >
                   <div className={cn(
-                    "flex gap-3 max-w-[85%]",
+                    "flex gap-2 sm:gap-3 max-w-[90%] sm:max-w-[85%]",
                     msg.role === 'user' ? "flex-row-reverse" : "flex-row"
                   )}>
                     <div className={cn(
-                      "w-8 h-8 rounded-xl flex items-center justify-center shrink-0 mt-1",
+                      "w-6 h-6 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl flex items-center justify-center shrink-0 mt-1",
                       msg.role === 'user' ? "bg-white/10" : "bg-[#ff4500]/10"
                     )}>
                       {msg.role === 'user' ? (
-                        <User size={16} className="text-zinc-400" />
+                        <User size={14} className="text-zinc-400 sm:w-4 sm:h-4" />
                       ) : (
-                        <AnimatedBotIcon className="w-6 h-6 text-[#ff4500]" isStatic />
+                        <AnimatedBotIcon className="w-4 h-4 sm:w-6 sm:h-6 text-[#ff4500]" isStatic />
                       )}
                     </div>
                     <div className={cn(
-                      "px-4 py-3 rounded-2xl text-sm leading-relaxed",
+                      "px-3 py-2 sm:px-4 sm:py-3 rounded-2xl text-[13px] sm:text-sm leading-relaxed",
                       msg.role === 'user'
                         ? "bg-[#ff4500] text-white rounded-tr-none"
                         : "bg-zinc-900 text-zinc-200 border border-white/5 rounded-tl-none"
                     )}>
-                      <div className="prose prose-invert prose-sm max-w-none">
+                      <div className="prose prose-invert prose-sm max-w-none text-[13px] sm:text-sm">
                         <ReactMarkdown>
                           {msg.content}
                         </ReactMarkdown>
@@ -322,14 +322,14 @@ const Chatbot = () => {
               ))}
               {isLoading && (
                 <div className="flex justify-start">
-                  <div className="flex gap-3 max-w-[85%]">
-                    <div className="w-8 h-8 rounded-xl bg-[#ff4500]/10 flex items-center justify-center shrink-0 p-1">
+                  <div className="flex gap-2 sm:gap-3 max-w-[90%] sm:max-w-[85%]">
+                    <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-[#ff4500]/10 flex items-center justify-center shrink-0 p-1">
                       <AnimatedBotIcon className="text-[#ff4500]" />
                     </div>
-                    <div className="bg-zinc-900 px-4 py-3 rounded-2xl rounded-tl-none flex gap-1">
-                      <span className="w-1.5 h-1.5 bg-zinc-600 rounded-full animate-bounce [animation-delay:-0.3s]" />
-                      <span className="w-1.5 h-1.5 bg-zinc-600 rounded-full animate-bounce [animation-delay:-0.15s]" />
-                      <span className="w-1.5 h-1.5 bg-zinc-600 rounded-full animate-bounce" />
+                    <div className="bg-zinc-900 px-3 py-2 sm:px-4 sm:py-3 rounded-2xl rounded-tl-none flex gap-1 items-center">
+                      <span className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-zinc-600 rounded-full animate-bounce [animation-delay:-0.3s]" />
+                      <span className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-zinc-600 rounded-full animate-bounce [animation-delay:-0.15s]" />
+                      <span className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-zinc-600 rounded-full animate-bounce" />
                     </div>
                   </div>
                 </div>
@@ -338,7 +338,7 @@ const Chatbot = () => {
             </div>
 
             {/* Input area */}
-            <div className="p-4 border-t border-white/5 bg-black">
+            <div className="p-2 sm:p-4 border-t border-white/5 bg-black">
               <div className="relative flex items-center">
                 <input
                   type="text"
@@ -346,16 +346,16 @@ const Chatbot = () => {
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
                   placeholder="Ask me anything..."
-                  className="w-full bg-zinc-900 border border-white/10 rounded-2xl py-3 pl-4 pr-12 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-[#ff4500]/50 transition-all"
+                  className="w-full bg-zinc-900 border border-white/10 rounded-2xl py-2 sm:py-3 pl-3 sm:pl-4 pr-10 sm:pr-12 text-[13px] sm:text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-[#ff4500]/50 transition-all"
                 />
                 <button
                   onClick={() => sendMessage()}
-                  className="absolute right-2 p-2 rounded-xl bg-[#ff4500] text-white hover:scale-105 active:scale-95 transition-all shadow-lg shadow-[#ff4500]/20"
+                  className="absolute right-1.5 sm:right-2 p-1.5 sm:p-2 rounded-xl bg-[#ff4500] text-white hover:scale-105 active:scale-95 transition-all shadow-lg shadow-[#ff4500]/20"
                 >
-                  <Send size={18} />
+                  <Send size={16} className="sm:w-[18px] sm:h-[18px]" />
                 </button>
               </div>
-              <p className="text-[10px] text-zinc-600 mt-2 text-center">Powered by HekaHub Intelligence</p>
+              <p className="text-[9px] sm:text-[10px] text-zinc-600 mt-1.5 sm:mt-2 text-center">Powered by HekaHub Intelligence</p>
             </div>
           </motion.div>
         )}
@@ -367,7 +367,7 @@ const Chatbot = () => {
         initial="initial"
         whileTap={{ scale: 0.9 }}
         onClick={() => setIsOpen(!isOpen)}
-        className="pointer-events-auto w-32 h-32 flex items-center justify-center transition-all relative group"
+        className="pointer-events-auto w-20 h-20 sm:w-32 sm:h-32 flex items-center justify-center transition-all relative group"
       >
         {/* CTA Tooltip Cloud */}
         {!isOpen && (
@@ -406,7 +406,7 @@ const Chatbot = () => {
             }}
             className="relative z-10"
           >
-            <AnimatedBotIcon className="w-24 h-24 text-[#ff4500]" />
+            <AnimatedBotIcon className="w-14 h-14 sm:w-24 sm:h-24 text-[#ff4500]" />
           </motion.div>
         )}
       </motion.button>
