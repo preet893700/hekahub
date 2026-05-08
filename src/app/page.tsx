@@ -276,7 +276,7 @@ export default function Home() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
               <span style={{ fontSize: '0.65rem', color: '#666', letterSpacing: '0.1em' }}>(EMAIL)</span>
-              <a href="mailto:admin@hekahub.com" style={{ fontSize: '1.25rem', color: '#ff4500', textDecoration: 'none', fontWeight: 500 }}>admin@hekahub.com</a>
+              <a href="mailto:register@hekahub.com" style={{ fontSize: '1.25rem', color: '#ff4500', textDecoration: 'none', fontWeight: 500 }}>register@hekahub.com</a>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
               <span style={{ fontSize: '0.65rem', color: '#666', letterSpacing: '0.1em' }}>(PHONE)</span>

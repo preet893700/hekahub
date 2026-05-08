@@ -40,6 +40,7 @@ export interface RegisterFormData {
   grade: string;
   programType: string;
   batchTiming: string;
+  trialSlot: string;
   referralSource: string;
   referralName: string;
   consentUpdates: boolean;
@@ -109,6 +110,7 @@ interface DropdownOption {
   value: string;
   label: string;
   sublabel?: string;
+  disabled?: boolean;
 }
 
 function CustomDropdown({
@@ -190,18 +192,23 @@ function CustomDropdown({
             backgroundColor: "#1a1a1a",
             border: "1px solid rgba(255,255,255,0.1)",
             borderRadius: "12px",
-            overflow: "hidden",
+            overflowY: "auto",
+            maxHeight: "280px",
             zIndex: 100,
             boxShadow: "0 16px 40px rgba(0,0,0,0.6)",
           }}
+          className="custom-scrollbar"
         >
           {options.map((opt) => (
             <button
               key={opt.value}
               type="button"
+              disabled={opt.disabled}
               onClick={() => {
-                onChange(opt.value);
-                setOpen(false);
+                if (!opt.disabled) {
+                  onChange(opt.value);
+                  setOpen(false);
+                }
               }}
               style={{
                 width: "100%",
@@ -210,28 +217,38 @@ function CustomDropdown({
                   value === opt.value ? "rgba(255,69,0,0.08)" : "transparent",
                 border: "none",
                 borderBottom: "1px solid rgba(255,255,255,0.05)",
-                color: value === opt.value ? "var(--color-accent)" : "#fff",
+                color: opt.disabled
+                  ? "rgba(255,255,255,0.15)"
+                  : value === opt.value ? "var(--color-accent)" : "#fff",
                 fontFamily: "var(--font-inter)",
                 fontSize: "0.9375rem",
                 textAlign: "left",
-                cursor: "pointer",
+                cursor: opt.disabled ? "not-allowed" : "pointer",
                 transition: "background 0.15s",
                 display: "flex",
                 flexDirection: "column",
                 gap: "0.2rem",
+                opacity: opt.disabled ? 0.7 : 1,
               }}
               onMouseEnter={(e) => {
-                if (value !== opt.value)
+                if (!opt.disabled && value !== opt.value)
                   (e.currentTarget as HTMLElement).style.backgroundColor =
                     "rgba(255,255,255,0.04)";
               }}
               onMouseLeave={(e) => {
-                if (value !== opt.value)
+                if (!opt.disabled && value !== opt.value)
                   (e.currentTarget as HTMLElement).style.backgroundColor =
                     "transparent";
               }}
             >
-              <span>{opt.label}</span>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <span>{opt.label}</span>
+                {opt.disabled && (
+                  <span style={{ fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'rgba(255,69,0,0.5)', fontWeight: 600 }}>
+                    Slot Filled
+                  </span>
+                )}
+              </div>
               {opt.sublabel && (
                 <span
                   style={{
@@ -250,14 +267,27 @@ function CustomDropdown({
           ))}
         </div>
       )}
-      {/* Hidden native input for required validation */}
+      {/* Hidden native input for required validation tooltip */}
       {required && (
         <input
           tabIndex={-1}
-          style={{ opacity: 0, height: 0, position: "absolute" }}
+          id={`${id}-hidden-input`}
+          style={{
+            opacity: 0,
+            width: "100%",
+            height: "1px",
+            position: "absolute",
+            top: "2.5rem", // Positioned where the trigger text is
+            left: 0,
+            pointerEvents: "none",
+            zIndex: -1
+          }}
           value={value || ""}
           required
           onChange={() => { }}
+          onInvalid={(e) => {
+            (e.target as HTMLInputElement).setCustomValidity("Please select an option from the list.");
+          }}
         />
       )}
     </div>
@@ -337,49 +367,50 @@ function Toast({
         bottom: "2rem",
         right: "2rem",
         zIndex: 9999,
-        maxWidth: "380px",
+        maxWidth: "400px",
         width: "calc(100vw - 4rem)",
         backgroundColor: "#111",
-        border: `1px solid ${type === "error" ? "rgba(255,0,0,0.2)" : "rgba(255,255,255,0.12)"}`,
-        borderRadius: "16px",
-        padding: "1.25rem 1.5rem",
-        boxShadow: "0 24px 60px rgba(0,0,0,0.8)",
+        border: `1px solid ${type === "error" ? "rgba(255,68,68,0.3)" : "rgba(255,255,255,0.12)"}`,
+        borderRadius: "20px",
+        padding: "1.5rem",
+        boxShadow: "0 24px 60px rgba(0,0,0,0.9)",
         fontFamily: "var(--font-inter)",
         animation: "toastIn 0.35s cubic-bezier(0.175,0.885,0.32,1.275) forwards",
       }}
     >
-      {/* Close */}
-      <button
-        onClick={onClose}
-        style={{
-          position: "absolute",
-          top: "0.875rem",
-          right: "0.875rem",
-          background: "none",
-          border: "none",
-          color: "rgba(255,255,255,0.35)",
-          cursor: "pointer",
-          fontSize: "1rem",
-          lineHeight: 1,
-          padding: "0.25rem",
-        }}
-        aria-label="Close"
-      >
-        ✕
-      </button>
-
       {/* Success/Error Message */}
-      <p
-        style={{
-          fontSize: "1rem",
-          fontWeight: 600,
-          color: type === "error" ? "#ff4444" : "#fff",
-          margin: "0 1.5rem 0.75rem 0",
-          lineHeight: 1.4,
-        }}
-      >
-        {message}
-      </p>
+      <div style={{ position: "relative" }}>
+        <button
+          onClick={onClose}
+          style={{
+            position: "absolute",
+            top: "-0.5rem",
+            right: "-0.5rem",
+            background: "none",
+            border: "none",
+            color: "rgba(255,255,255,0.35)",
+            cursor: "pointer",
+            fontSize: "1.25rem",
+            lineHeight: 1,
+            padding: "0.25rem",
+          }}
+          aria-label="Close"
+        >
+          ✕
+        </button>
+
+        <p
+          style={{
+            fontSize: "1rem",
+            fontWeight: 600,
+            color: type === "error" ? "#ff4444" : "#fff",
+            margin: "0 1.5rem 0.75rem 0",
+            lineHeight: 1.4,
+          }}
+        >
+          {message}
+        </p>
+      </div>
 
       {/* Divider */}
       <div
@@ -422,7 +453,7 @@ function Field({
   children: React.ReactNode;
 }) {
   return (
-    <div style={fieldWrap}>
+    <div style={{ ...fieldWrap, position: "relative" }}>
       <label htmlFor={id} style={labelBase}>
         {lbl}
       </label>
@@ -494,6 +525,7 @@ const EMPTY_FORM: RegisterFormData = {
   grade: "",
   programType: "",
   batchTiming: "",
+  trialSlot: "",
   referralSource: "",
   referralName: "",
   consentUpdates: false,
@@ -528,6 +560,31 @@ export function Register({
   const setField = (key: keyof RegisterFormData) =>
     (e: React.ChangeEvent<HTMLInputElement>) =>
       setForm((p) => ({ ...p, [key]: e.target.value }));
+
+  // Clear custom validity when these fields change
+  useEffect(() => {
+    if (form.grade) {
+      (document.getElementById('reg-grade-hidden-input') as HTMLInputElement)?.setCustomValidity("");
+    }
+  }, [form.grade]);
+
+  useEffect(() => {
+    if (form.programType) {
+      (document.getElementById('reg-program-hidden-input') as HTMLInputElement)?.setCustomValidity("");
+    }
+  }, [form.programType]);
+
+  useEffect(() => {
+    if (form.trialSlot) {
+      (document.getElementById('reg-trial-slot-hidden-input') as HTMLInputElement)?.setCustomValidity("");
+    }
+  }, [form.trialSlot]);
+
+  useEffect(() => {
+    if (form.referralSource) {
+      (document.getElementById('reg-referral-hidden-input') as HTMLInputElement)?.setCustomValidity("");
+    }
+  }, [form.referralSource]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -693,10 +750,23 @@ export function Register({
               />
               <input
                 tabIndex={-1}
-                style={{ opacity: 0, height: 0, position: "absolute" }}
+                id="reg-grade-hidden-input"
+                style={{
+                  opacity: 0,
+                  width: "100%",
+                  height: "1px",
+                  position: "absolute",
+                  top: "2.5rem", // Positioned over the grade pills
+                  left: 0,
+                  pointerEvents: "none",
+                  zIndex: -1
+                }}
                 value={form.grade || ""}
                 required
                 onChange={() => { }}
+                onInvalid={(e) => {
+                  (e.target as HTMLInputElement).setCustomValidity("Please select a grade.");
+                }}
               />
             </Field>
           </div>
@@ -710,6 +780,7 @@ export function Register({
                 onChange={(v) => setForm((p) => ({ ...p, programType: v }))}
                 options={[
                   { value: "bootcamp", label: "Summer Bootcamp" },
+                  { value: "trialClass", label: "Trial Class" },
                   { value: "weekday", label: "Weekday Batch" },
                   { value: "weekend", label: "Weekend Batch" },
                   { value: "annual", label: "Annual Membership" },
@@ -736,8 +807,8 @@ export function Register({
         <SectionDivider label="Final Details" />
 
         {/* How did you hear — LEFT | Referral Name — RIGHT */}
-        <div className="register-grid">
-          {/* LEFT */}
+        <div className="register-grid" style={{ marginBottom: form.programType === 'trialClass' ? "0" : "2.25rem" }}>
+          {/* LEFT — How did you hear */}
           <div>
             <Field id="reg-referral" label="How did you hear about us? *">
               <CustomDropdown
@@ -751,7 +822,7 @@ export function Register({
             </Field>
           </div>
 
-          {/* RIGHT — Referral Name appears here when source is selected */}
+          {/* RIGHT — Referral Name (Conditional) */}
           <div>
             {form.referralSource && (
               <Field id="reg-referral-name" label="Referral Name (Optional)">
@@ -774,6 +845,39 @@ export function Register({
             )}
           </div>
         </div>
+
+        {/* EXTRA ROW for Trial Slot */}
+        {form.programType === 'trialClass' && (
+          <div className="register-grid">
+            <div style={{ gridColumn: "1 / -1" }}>
+              <Field id="reg-trial-slot" label="Select Free Trial Slot *">
+                <CustomDropdown
+                  id="reg-trial-slot"
+                  value={form.trialSlot}
+                  onChange={(v) => setForm((p) => ({ ...p, trialSlot: v }))}
+                  options={[
+                    { value: "April 18", label: "Saturday, April 18th", disabled: true },
+                    { value: "April 19", label: "Sunday, April 19th", disabled: true },
+                    { value: "April 25", label: "Saturday, April 25th", disabled: true },
+                    { value: "April 26", label: "Sunday, April 26th", disabled: true },
+                    { value: "May 2", label: "Saturday, May 2nd", disabled: true },
+                    { value: "May 3", label: "Sunday, May 3rd", disabled: true },
+                    { value: "May 9", label: "Saturday, May 9th", disabled: true },
+                    { value: "May 10", label: "Sunday, May 10th", disabled: true },
+                    { value: "May 16", label: "Saturday, May 16th", disabled: true },
+                    { value: "May 17", label: "Sunday, May 17th" },
+                    { value: "May 23", label: "Saturday, May 23rd" },
+                    { value: "May 24", label: "Sunday, May 24th" },
+                    { value: "May 30", label: "Saturday, May 30th" },
+                    { value: "May 31", label: "Sunday, May 31st" },
+                  ]}
+                  placeholder="Select weekend slot"
+                  required
+                />
+              </Field>
+            </div>
+          </div>
+        )}
 
         {/* Consent */}
         <div
@@ -830,31 +934,36 @@ export function Register({
         {/* Submit */}
         <button
           type="submit"
-          disabled={!form.consentUpdates}
+          disabled={!form.consentUpdates || isSubmitting}
           className={cn(
-            "transition-all duration-300",
-            form.consentUpdates
-              ? "hover:bg-[var(--color-accent)] hover:border-[var(--color-accent)] hover:text-white"
-              : "opacity-40 cursor-not-allowed"
+            "group relative overflow-hidden px-8 py-5 rounded-full font-bold text-sm tracking-[0.15em] uppercase transition-all duration-500",
+            form.consentUpdates && !isSubmitting
+              ? "bg-[#ff4500] text-white shadow-[0_10px_30px_rgba(255,69,0,0.3)] hover:shadow-[0_15px_40px_rgba(255,69,0,0.4)] hover:-translate-y-1 active:scale-[0.98]"
+              : "bg-zinc-800 text-zinc-500 cursor-not-allowed opacity-50 border border-white/5"
           )}
           style={{
             width: "100%",
-            padding: "1.25rem",
-            borderRadius: "999px",
-            backgroundColor: "#111",
-            border: "1px solid #333",
-            color: "#fff",
-            fontSize: "0.875rem",
-            fontWeight: 700,
-            letterSpacing: "0.1em",
-            textTransform: "uppercase",
             fontFamily: "var(--font-inter)",
-            cursor: form.consentUpdates && !isSubmitting ? "pointer" : "not-allowed",
-            transition: "all 0.3s",
-            opacity: isSubmitting ? 0.7 : 1,
           }}
         >
-          {isSubmitting ? "Processing..." : submitLabel}
+          <span className="relative z-10 flex items-center justify-center gap-2">
+            {isSubmitting ? (
+              <>
+                <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <span>Processing...</span>
+              </>
+            ) : (
+              <span>{submitLabel}</span>
+            )}
+          </span>
+
+          {/* Hover Glow Effect */}
+          {form.consentUpdates && !isSubmitting && (
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] transition-transform" />
+          )}
         </button>
       </form>
 

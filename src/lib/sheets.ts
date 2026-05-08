@@ -25,20 +25,20 @@ export async function appendRegistration(row: string[]): Promise<void> {
       let credentials;
 
       if (process.env.GOOGLE_CLIENT_EMAIL && process.env.GOOGLE_PRIVATE_KEY) {
-        console.log("DEBUG: Using individual Google credentials");
-        
+        // console.log("DEBUG: Using individual Google credentials");
+
         let privateKey = process.env.GOOGLE_PRIVATE_KEY;
-        
+
         // 1. Find the exact start and end of the PEM block to ignore extra quotes/junk
         const startMarker = "-----BEGIN PRIVATE KEY-----";
         const endMarker = "-----END PRIVATE KEY-----";
-        
+
         if (privateKey.includes(startMarker) && privateKey.includes(endMarker)) {
           const start = privateKey.indexOf(startMarker);
           const end = privateKey.indexOf(endMarker) + endMarker.length;
           privateKey = privateKey.substring(start, end);
         }
-        
+
         // 2. Robust newline replacement (handles \\n, \\\\n, etc.)
         privateKey = privateKey.replace(/\\+n/g, '\n').trim();
 
@@ -49,7 +49,7 @@ export async function appendRegistration(row: string[]): Promise<void> {
         };
       } else if (process.env.GOOGLE_SERVICE_ACCOUNT_JSON) {
         // 2. Fallback to parsing the full JSON string if individual keys aren't set
-        console.log("DEBUG: Falling back to JSON string parsing");
+        // console.log("DEBUG: Falling back to JSON string parsing");
         let cleanedJson = process.env.GOOGLE_SERVICE_ACCOUNT_JSON.trim();
         if (cleanedJson.startsWith("'") && cleanedJson.endsWith("'")) {
           cleanedJson = cleanedJson.substring(1, cleanedJson.length - 1);

@@ -346,3 +346,18 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-inter);
   text-shadow: 0 0 10px rgba(255,255,255,0.1);
 }
+
+/* Chatbot Custom Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #27272a;
+  border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #ff4500;
+}

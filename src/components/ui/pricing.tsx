@@ -110,7 +110,7 @@ export function Pricing({
         {/* Group Booking (Secondary CTA) */}
         <div className="bg-[#0a0a0a] border border-[#222] rounded-2xl p-5 md:p-6 flex flex-col gap-3 min-w-[300px] max-w-sm shrink-0 shadow-xl shadow-black/50">
           <div>
-            <h3 className="text-lg md:text-xl font-inter font-semibold m-0 text-white">
+            <h3 className="text-2xl md:text-3xl font-bebas tracking-wide m-0 text-white leading-none">
               {bespokePlan.name}
             </h3>
             <p className="text-zinc-400 text-xs md:text-sm mt-1.5 leading-relaxed">
@@ -148,7 +148,7 @@ export function Pricing({
       </div>
 
       {/* ── Cinematic Carousel (Wide Bento Cards) ──────────────────── */}
-      <div className="relative h-[800px] md:h-[540px] lg:h-[480px] w-full flex items-center justify-center perspective-[2500px] mt-4 mb-16 md:mb-8">
+      <div className="relative h-[800px] md:h-[540px] lg:h-[480px] w-full flex items-center justify-center perspective-[1500px] mt-4 mb-16 md:mb-8">
         {plans.map((plan, idx) => {
           const isActive = idx === currentIndex;
           const diff = idx - currentIndex;
@@ -158,10 +158,10 @@ export function Pricing({
 
           const getX = () => {
             if (diff === 0) return "0%";
-            if (diff === -1) return isMobile ? "-105%" : "-65%";
-            if (diff === 1) return isMobile ? "105%" : "65%";
-            if (diff === -2) return isMobile ? "-210%" : "-130%";
-            if (diff === 2) return isMobile ? "210%" : "130%";
+            if (diff === -1) return isMobile ? "-105%" : "-55%";
+            if (diff === 1) return isMobile ? "105%" : "55%";
+            if (diff === -2) return isMobile ? "-210%" : "-110%";
+            if (diff === 2) return isMobile ? "210%" : "110%";
             return "0%";
           };
 
@@ -174,10 +174,18 @@ export function Pricing({
           const getRotateY = () => {
             if (isMobile) return 0;
             if (diff === 0) return 0;
-            if (diff === -1) return 12;
-            if (diff === 1) return -12;
-            if (diff === -2) return 20;
-            if (diff === 2) return -20;
+            if (diff === -1) return 45;
+            if (diff === 1) return -45;
+            if (diff === -2) return 60;
+            if (diff === 2) return -60;
+            return 0;
+          };
+
+          const getRotateZ = () => {
+            if (isMobile) return 0;
+            if (diff === 0) return 0;
+            if (diff === -1) return -3;
+            if (diff === 1) return 3;
             return 0;
           };
 
@@ -185,6 +193,11 @@ export function Pricing({
             if (diff === 0) return 30;
             if (Math.abs(diff) === 1) return 20;
             return 10;
+          };
+
+          const getZ = () => {
+            if (diff === 0) return 0;
+            return -150;
           };
 
           return (
@@ -197,35 +210,32 @@ export function Pricing({
               animate={{
                 x: getX(),
                 scale: getScale(),
+                z: getZ(),
                 opacity: diff === 0 ? 1 : Math.abs(diff) === 1 ? 0.4 : 0,
                 rotateY: getRotateY(),
+                rotateZ: getRotateZ(),
                 zIndex: getZIndex(),
                 filter: diff === 0 ? "blur(0px) brightness(1)" : "blur(4px) brightness(0.5)",
               }}
               transition={{
                 type: "spring",
-                stiffness: 250,
+                stiffness: 180,
                 damping: 25,
-                mass: 0.8,
+                mass: 1.2,
               }}
               style={{
                 transformStyle: "preserve-3d",
+                transformOrigin: diff < 0 ? "right center" : diff > 0 ? "left center" : "center center",
               }}
               className={cn(
-                "absolute w-[92vw] md:w-[660px] lg:w-[720px] xl:w-[780px] h-full rounded-[2rem] cursor-grab active:cursor-grabbing",
-                "bg-[#050505] border border-[#222] overflow-hidden",
-                isActive ? "shadow-[0_20px_60px_-15px_rgba(255,69,0,0.3)] ring-1 ring-[#ff4500]/50" : "shadow-2xl"
+                "absolute w-[92vw] md:w-[660px] lg:w-[720px] xl:w-[780px] h-full rounded-[2rem] cursor-grab active:cursor-grabbing"
               )}
             >
-              {/* Premium Top Highlight */}
-              {isActive && (
-                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#ff4500] to-transparent opacity-80 z-50" />
-              )}
 
               <div className="w-full h-full p-2 md:p-3 flex flex-col md:flex-row gap-2 md:gap-3 pointer-events-none">
 
                 {/* ── LEFT BENTO: Header + Features ── */}
-                <div className="md:w-[40%] lg:w-[38%] flex flex-col bg-[#111] border border-[#222] rounded-[1.25rem] p-4 md:p-5 relative overflow-hidden h-full">
+                <div className="md:w-[40%] lg:w-[38%] flex flex-col bg-[#111] border border-[#222] rounded-[1.25rem] p-4 md:p-5 relative overflow-hidden h-full transition-all duration-300 hover:-translate-y-1 hover:border-[#ff4500]/40 hover:shadow-[0_10px_20px_-10px_rgba(255,69,0,0.2)] pointer-events-auto group/bento">
                   <h3 className="text-2xl md:text-3xl font-bebas tracking-wide m-0 text-white flex items-center gap-3 relative z-10">
                     {plan.name}
                   </h3>
@@ -252,14 +262,14 @@ export function Pricing({
                   <div className="flex flex-col sm:flex-row gap-2 md:gap-3 flex-none md:flex-[0.8]">
 
                     {/* Small Bento 1: Description */}
-                    <div className="flex-[1.4] lg:flex-[1.5] bg-[#111] border border-[#222] rounded-[1.25rem] p-4 flex items-center justify-center sm:justify-start text-center sm:text-left">
+                    <div className="flex-[1.4] lg:flex-[1.5] bg-[#111] border border-[#222] rounded-[1.25rem] p-4 flex items-center justify-center sm:justify-start text-center sm:text-left transition-all duration-300 hover:-translate-y-1 hover:border-[#ff4500]/40 hover:shadow-[0_10px_20px_-10px_rgba(255,69,0,0.2)] pointer-events-auto">
                       <p className="text-zinc-400 text-xs md:text-sm lg:text-[0.9rem] leading-relaxed">
                         {plan.description}
                       </p>
                     </div>
 
                     {/* Small Bento 2: Enroll Button */}
-                    <div className="flex-1 bg-[#111] border border-[#222] rounded-[1.25rem] p-4 flex flex-col items-center justify-center gap-2">
+                    <div className="flex-1 bg-[#111] border border-[#222] rounded-[1.25rem] p-4 flex flex-col items-center justify-center gap-2 transition-all duration-300 hover:-translate-y-1 hover:border-[#ff4500]/40 hover:shadow-[0_10px_20px_-10px_rgba(255,69,0,0.2)] pointer-events-auto">
                       <button
                         disabled={!isActive}
                         onClick={(e) => {
@@ -281,7 +291,7 @@ export function Pricing({
                   </div>
 
                   {/* Bottom Row: Pricing Details */}
-                  <div className="bg-[#111] border border-[#222] rounded-[1.25rem] p-4 md:px-5 flex-1 flex flex-col justify-center relative overflow-hidden">
+                  <div className="bg-[#111] border border-[#222] rounded-[1.25rem] p-4 md:px-5 flex-1 flex flex-col justify-center relative overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:border-[#ff4500]/40 hover:shadow-[0_10px_20px_-10px_rgba(255,69,0,0.2)] pointer-events-auto">
                     <div className="inline-flex items-center gap-2 bg-[#ff4500]/10 border border-[#ff4500]/30 rounded-full px-2.5 py-1 mb-3 self-start relative z-10">
                       <span className="w-1.5 h-1.5 rounded-full bg-[#ff4500] animate-pulse" />
                       <span className="text-[0.6rem] text-[#ff4500] font-bold tracking-widest uppercase font-inter">

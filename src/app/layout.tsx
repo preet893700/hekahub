@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Bebas_Neue, Inter } from "next/font/google";
 import "./globals.css";
+import Chatbot from "@/components/ui/chatbot";
 
 const bebasNeue = Bebas_Neue({
   weight: "400",
@@ -21,6 +22,7 @@ export const metadata: Metadata = {
   },
 };
 
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -28,7 +30,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${bebasNeue.variable} ${inter.variable}`}>
-      <body>{children}</body>
+      <body className="antialiased">
+        {children}
+        <Chatbot />
+      </body>
     </html>
   );
 }

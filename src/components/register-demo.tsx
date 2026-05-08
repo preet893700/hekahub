@@ -58,7 +58,16 @@ export default function RegisterDemo() {
           let errorMessage = "Registration failed";
           try {
             const err = await res.json();
-            errorMessage = err.error ?? errorMessage;
+            if (err.details?.fieldErrors) {
+              const firstField = Object.keys(err.details.fieldErrors)[0];
+              if (firstField && err.details.fieldErrors[firstField].length > 0) {
+                errorMessage = err.details.fieldErrors[firstField][0];
+              } else {
+                errorMessage = err.error ?? errorMessage;
+              }
+            } else {
+              errorMessage = err.error ?? errorMessage;
+            }
           } catch (e) {
             // If JSON parsing fails, it's likely an HTML error page from the server
             const text = await res.text();

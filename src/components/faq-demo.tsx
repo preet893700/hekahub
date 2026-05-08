@@ -52,7 +52,7 @@ export default function FAQDemo() {
       title="Frequently Asked Questions"
       description="Can't find what you're looking for? Reach out to us directly."
       actionText="Contact Us"
-      actionLink="mailto:admin@hekahub.com"
+      actionLink="mailto:register@hekahub.com"
 
       faqs={faqs}
     />

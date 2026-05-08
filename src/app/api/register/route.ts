@@ -10,18 +10,20 @@ const PROGRAM_LABELS: Record<string, string> = {
   annual: "Annual Membership",
   weekday: "Weekday Batch",
   weekend: "Weekend Batch",
+  trialClass: "Trial Class",
 };
 
 const registerSchema = z.object({
-  fullName: z.string().min(2).max(100).trim(),
-  email: z.string().email().max(200).toLowerCase().trim(),
-  countryCode: z.string().regex(/^\+\d{1,4}$/),
-  phone: z.string().min(6).max(15).regex(/^[\d\s]+$/),
+  fullName: z.string().min(2, "Full name is not valid").max(100).trim(),
+  email: z.string().email("Email is not valid").max(200).toLowerCase().trim(),
+  countryCode: z.string().regex(/^\+\d{1,4}$/, "Country code is not valid"),
+  phone: z.string().min(10, "Phone number is not valid").max(15, "Phone number is not valid").regex(/^[\d\s\-\.\(\)]+$/, "Phone number is not valid"),
   city: z.string().max(100).optional().transform((v) => v?.trim() || ""),
-  studentName: z.string().min(2).max(100).trim(),
-  grade: z.string().min(1),
-  programType: z.enum(["bootcamp", "annual", "weekday", "weekend"]),
+  studentName: z.string().min(2, "Student name is not valid").max(100).trim(),
+  grade: z.string().min(1, "Grade is not valid"),
+  programType: z.enum(["bootcamp", "annual", "weekday", "weekend", "trialClass"]),
   batchTiming: z.string().min(1).max(200).trim(),
+  trialSlot: z.string().optional().transform((v) => v?.trim() || ""),
   referralSource: z.enum(["Social Media", "School", "Friend", "Ads", "Other"]),
   referralName: z.string().max(100).optional().transform((v) => v?.trim() || ""),
   consentUpdates: z.literal(true),
@@ -68,16 +70,17 @@ export async function POST(req: NextRequest) {
 
   // 5. Row Construction
   const row = [
-    data.fullName,                          // A: Parent's Full Name
-    `${data.countryCode} ${data.phone}`,     // B: Phone Number
-    data.email,                             // C: Email Address
-    data.city,                              // D: City / Location
-    data.studentName,                       // E: Student's Full Name
-    PROGRAM_LABELS[data.programType],       // F: Program Type
-    data.batchTiming,                       // G: Preferred Batch Timing
-    data.grade,                             // H: Grade
-    data.referralSource,                    // I: How did you hear about us?
-    data.referralName,                      // J: Referral Name
+    data.fullName,                          // 1. Parent's Full Name
+    `${data.countryCode} ${data.phone}`,     // 2. Phone Number
+    data.email,                             // 3. Email Address
+    data.city,                              // 4. City / Location
+    data.studentName,                       // 5. Student's Full Name
+    PROGRAM_LABELS[data.programType] || data.programType, // 6. Program Type
+    data.batchTiming,                       // 7. Preferred Batch Timing
+    data.grade,                             // 8. Grade
+    data.referralSource,                    // 9. How did you hear about us?
+    data.referralName,                      // 10. Referral Name
+    data.trialSlot,                         // 11. Trial Slot
   ];
 
   // 6. Sheet Write
