@@ -128,7 +128,7 @@ export default function Home() {
             <div style={{ textAlign: 'right' }}>
               <h2 className="hero-tagline" style={{
                 fontFamily: 'var(--font-bebas-neue)',
-                fontSize: 'clamp(3.6rem, 7.4vw, 7.7rem)',
+                fontSize: 'clamp(3.6rem, 7.4vw, 7.6rem)',
                 lineHeight: 0.9,
                 marginTop: 0,
                 marginBottom: 0,
