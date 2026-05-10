@@ -6,43 +6,39 @@ export default function FAQDemo() {
   const faqs = [
     {
       question: "Who is this program for?",
-      answer: "It's designed for students aged 10-15 who are curious about the future. No prior coding experience is required—we start from the absolute basics and build up to advanced AI logic.",
+      answer: "HekaHub is designed for curious minds of all ages—from Kids (10+) and Teens to College Students and Working Professionals. Our curriculum is tailored to bridge the gap between curiosity and professional-grade AI engineering.",
     },
     {
-      question: "How is the 8-week curriculum structured?",
-      answer: "The program follows our unique Orbital Curriculum across 40 intensive classes. It's designed to take students on a progressive journey, moving from foundational AI concepts to building complex, intelligent systems.",
+      question: "How is the curriculum structured?",
+      answer: "The program follows a mastery-based roadmap across 8 intensive modules. It's designed to take you on a progressive journey, moving from foundational AI logic to building complex, intelligent systems and a founder-level capstone project.",
     },
     {
-      question: "Do parents need a technical background to support their children?",
-      answer: "Not at all. The program is fully mentored by experts who handle the technical heavy lifting. Parents can simply watch their children transform into confident AI creators.",
+      question: "Do I need any prior technical or coding background?",
+      answer: "Not at all. We teach AI from first principles. If you can use a computer and have a problem-solving mindset, you can master AI. Our mentors handle the technical heavy lifting, guiding you through every line of code.",
     },
     {
-      question: "What is the difference between the Summer Bootcamp and Annual Membership?",
-      answer: "The Summer Bootcamp is an intensive 8-week launchpad. The Annual Membership is a long-term commitment to excellence, providing access to all seasonal bootcamps, guest expert sessions, and our full library of AI resources for the entire year.",
+      question: "What is the difference between the intensive batches and Annual Membership?",
+      answer: "The intensive batches (Weekday/Weekend) are focused 52-week tracks for deep mastery. The Annual Membership provides an all-access pass to all seasonal bootcamps, guest expert sessions, and our full library of AI resources for the entire year.",
     },
     {
       question: "Is a laptop mandatory for the workshop?",
-      answer: "Yes. This is a hands-on, build-first program. To participate in coding sessions and project work, a laptop is essential for every student.",
+      answer: "Yes. This is a hands-on, build-first program. To participate in engineering sessions and project work, a laptop is essential for every learner.",
     },
     {
-      question: "What is 'Zero-Cost Innovation' and why do we teach it?",
-      answer: "We teach students how to build high-impact AI products using powerful free-tier APIs. This 'Zero-Cost Innovation' approach ensures they can continue to build and experiment independently without worrying about expensive subscriptions.",
+      question: "Will I receive a certificate upon completion?",
+      answer: "Absolutely! Upon successful completion of the program and the final project showcase, you will receive the **HekaHub Certificate** to recognize your technical mastery and ability to build lean AI solutions.",
     },
     {
-      question: "Will students receive a certificate upon completion?",
-      answer: "Absolutely! Upon successful completion of the program and the final project showcase, students receive a HekaHub Certificate of AI Excellence to recognize their technical achievements.",
-    },
-    {
-      question: "How does this program help with a student's future profile?",
-      answer: "Beyond coding, we focus on portfolio building. By the end of the program, students will have 20+ real-world projects to showcase, demonstrating their technical mastery and problem-solving skills to schools and future opportunities.",
+      question: "How does this program help with my career or college profile?",
+      answer: "Beyond coding, we focus on portfolio building. By the end of the program, you will have 20+ real-world projects to showcase, demonstrating your technical mastery and problem-solving skills to employers, universities, and investors.",
     },
     {
       question: "Are there different batches for different time zones?",
       answer: "Yes, we offer specialized batches for India, the USA, and the UK. You can select the batch that best fits your schedule during the registration process.",
     },
     {
-      question: "How do I secure the Early Bird pricing and complete enrollment?",
-      answer: "Simply register through our enrollment form. Our team will reach out to you via Email with the payment details and the next steps to secure your spot in the upcoming cohort.",
+      question: "How do I secure the Early Bird pricing?",
+      answer: "Simply register through our enrollment form. Our team will reach out to you via Email with the payment details and the next steps to secure your spot in the upcoming cohort and lock in the Early Bird rate.",
     },
   ];
 

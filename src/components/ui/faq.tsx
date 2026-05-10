@@ -2,6 +2,7 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import { ChevronDown, ChevronUp, ArrowUpRight } from "lucide-react";
+import ReactMarkdown from 'react-markdown';
 import { cn } from "@/lib/utils";
 
 export interface FAQItemProps {
@@ -54,9 +55,12 @@ const FAQItem: React.FC<FAQItemProps> = ({ question, answer, isOpen, onClick }) 
         style={{ height: height !== undefined ? height : 0, opacity: isOpen ? 1 : 0 }}
       >
         <div ref={contentRef} className="pb-6 pt-0">
-          <p style={{ fontFamily: 'var(--font-inter)', fontSize: '1rem', color: 'var(--color-text-muted)', lineHeight: '1.6' }}>
-            {answer}
-          </p>
+          <div 
+            className="prose prose-invert prose-sm max-w-none"
+            style={{ fontFamily: 'var(--font-inter)', fontSize: '1rem', color: 'var(--color-text-muted)', lineHeight: '1.6' }}
+          >
+            <ReactMarkdown>{answer}</ReactMarkdown>
+          </div>
         </div>
       </div>
     </div>

@@ -12,7 +12,7 @@ export interface RegisterConfig {
   label?: string;
   title?: string;
   subtitle?: string;
-  gradeOptions?: string[];
+  ageGroupOptions?: string[];
   batchOptions?: { label: string; sublabel: string; value: string }[];
   referralOptions?: string[];
   consentText?: string;
@@ -37,9 +37,10 @@ export interface RegisterFormData {
   phone: string;
   city: string;
   studentName: string;
-  grade: string;
+  ageGroup: string;
   programType: string;
   batchTiming: string;
+  isTrial: boolean;
   trialSlot: string;
   referralSource: string;
   referralName: string;
@@ -50,11 +51,11 @@ export interface RegisterFormData {
 // DEFAULT CONFIG — edit all copy here
 // ─────────────────────────────────────────────
 const DEFAULT_CONFIG: Required<RegisterConfig> = {
-  label: "SUMMER INTERNSHIP 2026",
-  title: "Register for Summer Internship",
+  label: "AI MASTERY PROGRAM 2026",
+  title: "Join the AI Revolution",
   subtitle:
-    "Secure your spot in our 8-week AI Workshop. Fill in the details below and we'll reach out to confirm your enrollment.",
-  gradeOptions: ["4", "5", "6", "7", "8", "9", "10", "11", "12"],
+    "Flexible Weekday and Weekend batches for Kids, College Students, and Professionals. Start your journey into Engineered Intelligence today.",
+  ageGroupOptions: ["Kids", "Teens", "College Students", "Professionals"],
   batchOptions: [
     {
       value: "morning",
@@ -295,14 +296,14 @@ function CustomDropdown({
 }
 
 // ─────────────────────────────────────────────
-// GRADE SCROLLER
+// AGE GROUP SCROLLER
 // ─────────────────────────────────────────────
-function GradeScroller({
-  grades,
+function AgeGroupScroller({
+  options,
   value,
   onChange,
 }: {
-  grades: string[];
+  options: string[];
   value: string;
   onChange: (v: string) => void;
 }) {
@@ -317,7 +318,7 @@ function GradeScroller({
         borderBottom: "1px solid rgba(255,255,255,0.12)",
       }}
     >
-      {grades.map((g) => {
+      {options.map((g) => {
         const active = value === g;
         return (
           <button
@@ -522,9 +523,10 @@ const EMPTY_FORM: RegisterFormData = {
   phone: "",
   city: "",
   studentName: "",
-  grade: "",
+  ageGroup: "",
   programType: "",
   batchTiming: "",
+  isTrial: false,
   trialSlot: "",
   referralSource: "",
   referralName: "",
@@ -538,7 +540,7 @@ export function Register({
   label = DEFAULT_CONFIG.label,
   title = DEFAULT_CONFIG.title,
   subtitle = DEFAULT_CONFIG.subtitle,
-  gradeOptions = DEFAULT_CONFIG.gradeOptions,
+  ageGroupOptions = DEFAULT_CONFIG.ageGroupOptions,
   batchOptions = DEFAULT_CONFIG.batchOptions,
   referralOptions = DEFAULT_CONFIG.referralOptions,
   consentText = DEFAULT_CONFIG.consentText,
@@ -563,10 +565,10 @@ export function Register({
 
   // Clear custom validity when these fields change
   useEffect(() => {
-    if (form.grade) {
-      (document.getElementById('reg-grade-hidden-input') as HTMLInputElement)?.setCustomValidity("");
+    if (form.ageGroup) {
+      (document.getElementById('reg-age-group-hidden-input') as HTMLInputElement)?.setCustomValidity("");
     }
-  }, [form.grade]);
+  }, [form.ageGroup]);
 
   useEffect(() => {
     if (form.programType) {
@@ -575,10 +577,10 @@ export function Register({
   }, [form.programType]);
 
   useEffect(() => {
-    if (form.trialSlot) {
+    if (form.trialSlot || !form.isTrial) {
       (document.getElementById('reg-trial-slot-hidden-input') as HTMLInputElement)?.setCustomValidity("");
     }
-  }, [form.trialSlot]);
+  }, [form.trialSlot, form.isTrial]);
 
   useEffect(() => {
     if (form.referralSource) {
@@ -741,31 +743,31 @@ export function Register({
               />
             </Field>
 
-            {/* Grade pill scroller */}
-            <Field id="reg-grade" label={`Grade *${form.grade ? ` — Grade ${form.grade}` : ""}`}>
-              <GradeScroller
-                grades={gradeOptions}
-                value={form.grade}
-                onChange={(v) => setForm((p) => ({ ...p, grade: v }))}
+            {/* Age Group pill scroller */}
+            <Field id="reg-age-group" label={`Age Group *${form.ageGroup ? ` — ${form.ageGroup}` : ""}`}>
+              <AgeGroupScroller
+                options={ageGroupOptions}
+                value={form.ageGroup}
+                onChange={(v) => setForm((p) => ({ ...p, ageGroup: v }))}
               />
               <input
                 tabIndex={-1}
-                id="reg-grade-hidden-input"
+                id="reg-age-group-hidden-input"
                 style={{
                   opacity: 0,
                   width: "100%",
                   height: "1px",
                   position: "absolute",
-                  top: "2.5rem", // Positioned over the grade pills
+                  top: "2.5rem", // Positioned over the age group pills
                   left: 0,
                   pointerEvents: "none",
                   zIndex: -1
                 }}
-                value={form.grade || ""}
+                value={form.ageGroup || ""}
                 required
                 onChange={() => { }}
                 onInvalid={(e) => {
-                  (e.target as HTMLInputElement).setCustomValidity("Please select a grade.");
+                  (e.target as HTMLInputElement).setCustomValidity("Please select an age group.");
                 }}
               />
             </Field>
@@ -779,10 +781,9 @@ export function Register({
                 value={form.programType}
                 onChange={(v) => setForm((p) => ({ ...p, programType: v }))}
                 options={[
-                  { value: "bootcamp", label: "Summer Bootcamp" },
-                  { value: "trialClass", label: "Trial Class" },
                   { value: "weekday", label: "Weekday Batch" },
                   { value: "weekend", label: "Weekend Batch" },
+                  { value: "bootcamp", label: "Summer Bootcamp" },
                   { value: "annual", label: "Annual Membership" },
                 ]}
                 placeholder="Select program"
@@ -807,7 +808,7 @@ export function Register({
         <SectionDivider label="Final Details" />
 
         {/* How did you hear — LEFT | Referral Name — RIGHT */}
-        <div className="register-grid" style={{ marginBottom: form.programType === 'trialClass' ? "0" : "2.25rem" }}>
+        <div className="register-grid" style={{ marginBottom: form.isTrial ? "0" : "2.25rem" }}>
           {/* LEFT — How did you hear */}
           <div>
             <Field id="reg-referral" label="How did you hear about us? *">
@@ -846,9 +847,61 @@ export function Register({
           </div>
         </div>
 
+        {/* Trial Class Checkbox */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "0.875rem",
+            marginBottom: form.isTrial ? "1.5rem" : "2.5rem",
+          }}
+        >
+          <button
+            type="button"
+            id="reg-is-trial"
+            onClick={() =>
+              setForm((p) => ({ ...p, isTrial: !p.isTrial, trialSlot: !p.isTrial ? p.trialSlot : "" }))
+            }
+            style={{
+              width: "18px",
+              height: "18px",
+              border: `1px solid ${form.isTrial ? "var(--color-accent)" : "rgba(255,255,255,0.2)"}`,
+              borderRadius: "3px",
+              backgroundColor: form.isTrial ? "var(--color-accent)" : "transparent",
+              cursor: "pointer",
+              flexShrink: 0,
+              transition: "all 0.2s",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            {form.isTrial && (
+              <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
+                <path
+                  d="M1 4L3.5 6.5L9 1"
+                  stroke="#fff"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            )}
+          </button>
+          <span
+            style={{
+              fontSize: "0.9rem",
+              color: "var(--color-text-muted)",
+              fontFamily: "var(--font-inter)",
+            }}
+          >
+            Want to book a <b style={{ color: '#fff' }}>Free Trial Class</b>? No payment required!
+          </span>
+        </div>
+
         {/* EXTRA ROW for Trial Slot */}
-        {form.programType === 'trialClass' && (
-          <div className="register-grid">
+        {form.isTrial && (
+          <div className="register-grid" style={{ marginBottom: '2.5rem' }}>
             <div style={{ gridColumn: "1 / -1" }}>
               <Field id="reg-trial-slot" label="Select Free Trial Slot *">
                 <CustomDropdown
@@ -862,14 +915,14 @@ export function Register({
                     { value: "April 26", label: "Sunday, April 26th", disabled: true },
                     { value: "May 2", label: "Saturday, May 2nd", disabled: true },
                     { value: "May 3", label: "Sunday, May 3rd", disabled: true },
-                    { value: "May 9", label: "Saturday, May 9th", disabled: true },
                     { value: "May 10", label: "Sunday, May 10th", disabled: true },
-                    { value: "May 16", label: "Saturday, May 16th", disabled: true },
+                    { value: "May 11", label: "Monday, May 11th" },
                     { value: "May 17", label: "Sunday, May 17th" },
-                    { value: "May 23", label: "Saturday, May 23rd" },
+                    { value: "May 18", label: "Monday, May 18th" },
                     { value: "May 24", label: "Sunday, May 24th" },
-                    { value: "May 30", label: "Saturday, May 30th" },
+                    { value: "May 25", label: "Monday, May 25th" },
                     { value: "May 31", label: "Sunday, May 31st" },
+                    { value: "June 1", label: "Monday, June 1st" },
                   ]}
                   placeholder="Select weekend slot"
                   required

@@ -56,17 +56,36 @@ export default function Home() {
 
           {/* (1) & (2) TOP ROW: Wordmark (top-left) and Status/CTA (top-right) */}
           <div className="hero-top-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-            <h1 style={{
-              fontFamily: 'var(--font-bebas-neue)',
-              fontSize: '7vw',
-              lineHeight: 0.8,
-              margin: 0,
-              color: '#dedede',
-              letterSpacing: '-1px',
-              pointerEvents: 'auto'
-            }}>
-              HEKAHUB<sup style={{ fontSize: '0.2em', verticalAlign: 'super' }}></sup>
-            </h1>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+              <h1 style={{
+                fontFamily: 'var(--font-bebas-neue)',
+                fontSize: '7vw',
+                lineHeight: 0.8,
+                margin: 0,
+                color: '#dedede',
+                letterSpacing: '-1px',
+                pointerEvents: 'auto'
+              }}>
+                HEKAHUB<sup style={{ fontSize: '0.2em', verticalAlign: 'super' }}></sup>
+              </h1>
+
+              <div style={{
+                marginTop: '0.75rem',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                backgroundColor: 'rgba(255, 69, 0, 0.08)',
+                border: '1px solid rgba(255, 69, 0, 0.2)',
+                padding: '0.35rem 0.85rem',
+                borderRadius: '2rem',
+                pointerEvents: 'auto'
+              }}>
+                <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#ff4500' }} />
+                <span style={{ fontSize: '0.65rem', color: '#ff4500', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', fontFamily: 'var(--font-inter)' }}>
+                  Free Trial Slots Available
+                </span>
+              </div>
+            </div>
 
             <div className="hero-pill" style={{
               display: 'flex',
@@ -82,8 +101,8 @@ export default function Home() {
               letterSpacing: '0.05em',
               pointerEvents: 'auto'
             }}>
-              <span style={{ color: '#4ade80' }}>●</span> ENROLLING NOW<span className="hero-pill-extra"> · KIDS AI BOOTCAMP · 2026</span>
-              <span style={{ color: '#444' }}>•</span>
+              <span style={{ color: '#4ade80' }}>●</span> ENROLLING NOW<span className="hero-pill-extra"> · WEEKDAY & WEEKEND BATCHES · 2026</span>
+              {/* <span style={{ color: '#444' }}>•</span> */}
               {/* <a href={`https://wa.me/919235327048?text=${encodeURIComponent("Hi HekaHub! I'm interested in the Summer 2026 AI Internship for my child. I'd like to enroll him in the 8 week program. Can we chat?")}`} target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'none', fontWeight: 600 }}>LET'S TALK →</a> */}
             </div>
           </div>
@@ -93,15 +112,15 @@ export default function Home() {
             {/* Secondary Hook */}
             <div className="hero-secondary-hook" style={{ maxWidth: '240px' }}>
               <div className="hero-stats-labels" style={{ display: 'flex', flexDirection: 'column', gap: '0rem' }}>
-                <span className="hero-stats-label" style={{ fontSize: '0.7rem', color: '#fff', opacity: 0.8, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', display: 'block', marginBottom: '0rem' }}>40 classes | 8 weeks </span>
+                <span className="hero-stats-label" style={{ fontSize: '0.7rem', color: '#fff', opacity: 0.8, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', display: 'block', marginBottom: '0rem' }}>Flexible Batches </span>
                 <span className="hero-stats-label" style={{ fontSize: '0.7rem', color: '#fff', opacity: 0.8, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', display: 'block', marginBottom: '0rem' }}>160+ hours of learning </span>
               </div>
-              <h3 style={{ fontSize: '1.5rem', color: '#fff', fontFamily: 'var(--font-inter)', fontWeight: 600, margin: 0, lineHeight: 1.1, marginTop: '1rem' }}>
-                For ages 10 - 15
+              <h3 style={{ fontSize: '1.5rem', color: '#fff', fontFamily: 'var(--font-inter)', fontWeight: 600, marginTop: '0.75rem', marginBottom: 0, marginLeft: 0, marginRight: 0, lineHeight: 1.2 }}>
+                For Kids to Professionals
               </h3>
-              <p style={{ color: '#888', fontSize: '0.875rem', marginTop: '0.5rem', lineHeight: 1.4, margin: 0 }}>
-                Build 20+ real-world projects<br />
-                No prior coding experience needed
+              <p style={{ color: '#888', fontSize: '0.875rem', marginTop: '1.1rem', marginBottom: 0, marginLeft: 0, marginRight: 0, lineHeight: 1.4 }}>
+                Build 20+ real-world AI projects<br />
+                From fundamentals to engineered intelligence
               </p>
             </div>
 
@@ -109,16 +128,19 @@ export default function Home() {
             <div style={{ textAlign: 'right' }}>
               <h2 className="hero-tagline" style={{
                 fontFamily: 'var(--font-bebas-neue)',
-                fontSize: 'clamp(4rem, 8vw, 8.5rem)',
+                fontSize: 'clamp(3.6rem, 7.4vw, 7.7rem)',
                 lineHeight: 0.9,
-                margin: 0,
+                marginTop: 0,
+                marginBottom: 0,
+                marginLeft: 0,
+                marginRight: 0,
                 color: '#fff',
                 textAlign: 'right'
               }}>
-                <span style={{ opacity: 0.25 }}>BUILD AI</span><br />
-                <span style={{ opacity: 0.5 }}>THINK BIG</span><br />
-                <span style={{ opacity: 0.75 }}>START</span><br />
-                <span style={{ opacity: 1 }}>YOUNG<span style={{ color: '#ff4500' }}>.</span></span>
+                <span style={{ opacity: 0.25 }}>MASTER AI</span><br />
+                <span style={{ opacity: 0.5 }}>GO BEYOND</span><br />
+                <span style={{ opacity: 0.75 }}>LEAD</span><br />
+                <span style={{ opacity: 1 }}>BOLD<span style={{ color: '#ff4500' }}>.</span></span>
               </h2>
             </div>
           </div>
@@ -131,13 +153,16 @@ export default function Home() {
                 color: '#888',
                 fontSize: '1.125rem',
                 lineHeight: 1.3,
-                margin: 0,
+                marginTop: 0,
+                marginBottom: 0,
+                marginLeft: 0,
+                marginRight: 0,
                 fontFamily: 'var(--font-inter)'
               }}>
                 Turn ideas into AI products.<br />
-                The next generation starts here.<br />
+                The next generation of innovators starts here.<br />
                 <span style={{ fontSize: '0.95rem', color: '#666' }}>
-                  Your <span style={{ color: '#ff4500', fontWeight: 600 }}>8-week</span> launchpad.
+                  Your <span style={{ color: '#ff4500', fontWeight: 600 }}>year-round</span> launchpad.
                 </span>
               </p>
             </div>
@@ -169,9 +194,9 @@ export default function Home() {
 
         <div style={{ flex: '1 1 40%', minWidth: '300px' }}>
           <span style={{ color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '2px', fontSize: '0.875rem' }}>(THE ROADMAP)</span>
-          <h2 className="title-section" style={{ margin: '1rem 0 0 0', fontFamily: 'var(--font-bebas-neue)', fontSize: 'clamp(4rem, 6vw, 6rem)', lineHeight: 1 }}>8-WEEK<br />CURRICULUM</h2>
+          <h2 className="title-section" style={{ margin: '1rem 0 0 0', fontFamily: 'var(--font-bebas-neue)', fontSize: 'clamp(4rem, 6vw, 6rem)', lineHeight: 1 }}>MASTER<br />CURRICULUM</h2>
           <p style={{ color: 'var(--color-text-muted)', fontSize: '1.125rem', marginTop: '1.5rem', maxWidth: '500px', fontFamily: 'var(--font-inter)' }}>
-            Each week, a new AI superpower. From crafting your first prompt to pitching your own AI-powered idea — by Week 8, you don't just use AI. You think with it.
+            Each module, a new AI superpower. From crafting your first prompt to architecting your own AI ecosystem — we don't just teach AI. We engineer intelligence.
           </p>
         </div>
 
@@ -311,10 +336,10 @@ export default function Home() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
             <span style={{ fontSize: '0.65rem', color: '#666', letterSpacing: '0.1em' }}>(SOCIALS)</span>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '1.125rem' }}>
-              <a href="https://x.com/HekaosInc" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.5rem' }} className="hover:opacity-70">X/Twitter <span style={{ fontSize: '0.75rem' }}>↗</span></a>
-              <a href="https://www.instagram.com/hekaos/" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.5rem' }} className="hover:opacity-70">Instagram <span style={{ fontSize: '0.75rem' }}>↗</span></a>
-              <a href="https://www.linkedin.com/company/hekaos/" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.5rem' }} className="hover:opacity-70">LinkedIn <span style={{ fontSize: '0.75rem' }}>↗</span></a>
-              <a href="https://www.facebook.com/HeKaos/" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.5rem' }} className="hover:opacity-70">Facebook <span style={{ fontSize: '0.75rem' }}>↗</span></a>
+              <a href="https://x.com/hekahub/" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.5rem' }} className="hover:opacity-70">X/Twitter <span style={{ fontSize: '0.75rem' }}>↗</span></a>
+              <a href="https://www.instagram.com/heka_hub/" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.5rem' }} className="hover:opacity-70">Instagram <span style={{ fontSize: '0.75rem' }}>↗</span></a>
+              <a href="https://www.linkedin.com/showcase/hekahub/about/" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.5rem' }} className="hover:opacity-70">LinkedIn <span style={{ fontSize: '0.75rem' }}>↗</span></a>
+              <a href="https://www.facebook.com/hekahub/" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.5rem' }} className="hover:opacity-70">Facebook <span style={{ fontSize: '0.75rem' }}>↗</span></a>
             </div>
 
           </div>
@@ -395,7 +420,7 @@ export default function Home() {
             </h2>
             <div style={{ textAlign: 'right', paddingBottom: '1rem' }}>
               <p style={{ margin: 0, fontSize: 'clamp(2rem, 4vw, 4rem)', fontWeight: 700, lineHeight: 1, fontFamily: 'var(--font-inter)', letterSpacing: '-0.02em' }}>
-                Beyond Coding.<br />Built with AI.
+                Beyond Coding.<br />For Everyone.
               </p>
             </div>
           </div>

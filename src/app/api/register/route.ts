@@ -10,7 +10,6 @@ const PROGRAM_LABELS: Record<string, string> = {
   annual: "Annual Membership",
   weekday: "Weekday Batch",
   weekend: "Weekend Batch",
-  trialClass: "Trial Class",
 };
 
 const registerSchema = z.object({
@@ -20,9 +19,10 @@ const registerSchema = z.object({
   phone: z.string().min(10, "Phone number is not valid").max(15, "Phone number is not valid").regex(/^[\d\s\-\.\(\)]+$/, "Phone number is not valid"),
   city: z.string().max(100).optional().transform((v) => v?.trim() || ""),
   studentName: z.string().min(2, "Student name is not valid").max(100).trim(),
-  grade: z.string().min(1, "Grade is not valid"),
-  programType: z.enum(["bootcamp", "annual", "weekday", "weekend", "trialClass"]),
+  ageGroup: z.string().min(1, "Age Group is not valid"),
+  programType: z.enum(["bootcamp", "annual", "weekday", "weekend"]),
   batchTiming: z.string().min(1).max(200).trim(),
+  isTrial: z.boolean().default(false),
   trialSlot: z.string().optional().transform((v) => v?.trim() || ""),
   referralSource: z.enum(["Social Media", "School", "Friend", "Ads", "Other"]),
   referralName: z.string().max(100).optional().transform((v) => v?.trim() || ""),
@@ -62,6 +62,11 @@ export async function POST(req: NextRequest) {
   }
 
   const data = result.data;
+  
+  // Normalize ageGroup for backward compatibility
+  if (data.ageGroup === "Adults") {
+    data.ageGroup = "Professionals";
+  }
 
   // 4. Honeypot Check (after validation)
   if (data.website && data.website.length > 0) {
@@ -77,10 +82,11 @@ export async function POST(req: NextRequest) {
     data.studentName,                       // 5. Student's Full Name
     PROGRAM_LABELS[data.programType] || data.programType, // 6. Program Type
     data.batchTiming,                       // 7. Preferred Batch Timing
-    data.grade,                             // 8. Grade
+    data.ageGroup,                             // 8. Age Group
     data.referralSource,                    // 9. How did you hear about us?
     data.referralName,                      // 10. Referral Name
-    data.trialSlot,                         // 11. Trial Slot
+    data.isTrial ? "Yes" : "No",            // 11. Trial Requested
+    data.trialSlot,                         // 12. Trial Slot
   ];
 
   // 6. Sheet Write

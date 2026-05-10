@@ -15,8 +15,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Hekahub",
-  description: "AI-powered learning for ages 10-15. Build real projects, master new skills, and launch your future with Hekahub.",
+  title: "HekaHub",
+  description: "Flexible Mastery-based AI training for Kids, College Students, and Professionals. Build real-world projects, master new skills, and launch your future with HekaHub.",
   icons: {
     icon: "/HekaHub_Icon-trans.png",
   },

@@ -8,10 +8,10 @@ import { Register } from "@/components/ui/register";
 export default function RegisterDemo() {
   return (
     <Register
-      label="SUMMER BOOTCAMP FOR 2026"
-      title="Register for Summer CLASSES (Age 10-15)"
-      subtitle="Secure your spot in our 8-week AI Bootcamp. Fill in the details below and we'll reach out to confirm your enrollment."
-      gradeOptions={["4", "5", "6", "7", "8", "9", "Other"]}
+      label="AI MASTERY PROGRAM 2026"
+      title="Master AI & Build the Future"
+      subtitle="Flexible Weekday and Weekend batches for Kids, College Students, and Professionals. Start your journey into Engineered Intelligence today."
+      ageGroupOptions={["Kids", "Teens", "College Students", "Professionals"]}
       batchOptions={[
         {
           value: "us",
