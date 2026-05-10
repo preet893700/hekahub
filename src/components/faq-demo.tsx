@@ -25,7 +25,7 @@ export default function FAQDemo() {
       answer: "Yes. This is a hands-on, build-first program. To participate in engineering sessions and project work, a laptop is essential for every learner.",
     },
     {
-      question: "Will I receive a certificate upon completion?",
+      question: "Will I receive a certificate upon completion ?",
       answer: "Absolutely! Upon successful completion of the program and the final project showcase, you will receive the **HekaHub Certificate** to recognize your technical mastery and ability to build lean AI solutions.",
     },
     {
