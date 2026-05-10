@@ -124,6 +124,8 @@ export function FAQ({
         
         <a 
           href={actionLink} 
+          target="_blank"
+          rel="noopener noreferrer"
           className="group flex items-center gap-2 px-8 py-3 bg-[var(--color-accent)] text-white rounded-full font-semibold transition-all duration-300 hover:scale-105 active:scale-95 shadow-lg shadow-[var(--color-accent)]/20"
           style={{ fontFamily: 'var(--font-inter)' }}
         >

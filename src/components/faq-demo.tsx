@@ -48,7 +48,7 @@ export default function FAQDemo() {
       title="Frequently Asked Questions"
       description="Can't find what you're looking for? Reach out to us directly."
       actionText="Contact Us"
-      actionLink="mailto:register@hekahub.com"
+      actionLink={`https://wa.me/919235327048?text=${encodeURIComponent("Hi HekaHub! I have some questions about the AI Master Roadmap. Can you help me?")}`}
 
       faqs={faqs}
     />
