@@ -69,37 +69,53 @@ export default function Home() {
                 HEKAHUB<sup style={{ fontSize: '0.2em', verticalAlign: 'super' }}></sup>
               </h1>
 
-              <div style={{
+              <div className="hero-pill" style={{
                 marginTop: '0.75rem',
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '0.5rem',
                 backgroundColor: 'rgba(255, 69, 0, 0.08)',
                 border: '1px solid rgba(255, 69, 0, 0.2)',
-                padding: '0.35rem 0.85rem',
+                padding: '0.2rem 0.6rem',
                 borderRadius: '2rem',
+                whiteSpace: 'nowrap',
                 pointerEvents: 'auto'
               }}>
                 <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#ff4500' }} />
-                <span style={{ fontSize: '0.65rem', color: '#ff4500', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', fontFamily: 'var(--font-inter)' }}>
-                  Free Trial Slots Available
+                <span style={{ fontSize: '0.6rem', color: '#ff4500', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', fontFamily: 'var(--font-inter)', whiteSpace: 'nowrap' }}>
+                  <span className="hidden sm:inline">Free Trial Slots Available</span>
+                  <span className="inline sm:hidden">Free Trial Available</span>
+                </span>
+              </div>
+
+              <div className="hero-pill" style={{
+                marginTop: '0.4rem',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                padding: '0.2rem 0.6rem',
+                borderRadius: '2rem',
+                whiteSpace: 'nowrap',
+                pointerEvents: 'auto'
+              }}>
+                <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#888' }} />
+                <span style={{ fontSize: '0.6rem', color: '#888', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', fontFamily: 'var(--font-inter)', whiteSpace: 'nowrap' }}>
+                  Limited Seats
                 </span>
               </div>
             </div>
 
-            <div className="hero-pill" style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.75rem',
+            <div className="hero-pill flex items-center shrink-0 whitespace-nowrap pointer-events-auto px-[0.6rem] py-[0.2rem] text-[0.6rem] tracking-[0.1em] mt-0 md:px-[1.25rem] md:py-[0.6rem] md:text-[0.75rem] md:tracking-[0.05em] md:mt-[0.25rem]" style={{
+              gap: '0.5rem',
               backgroundColor: 'rgba(255,255,255,0.05)',
-              padding: '0.6rem 1.25rem',
               borderRadius: '99px',
               border: '1px solid rgba(255,255,255,0.1)',
-              fontSize: '0.75rem',
               fontFamily: 'var(--font-inter)',
+              fontWeight: 700,
               color: '#888',
-              letterSpacing: '0.05em',
-              pointerEvents: 'auto'
+              textTransform: 'uppercase',
             }}>
               <span style={{ color: '#4ade80' }}>●</span> ENROLLING NOW<span className="hero-pill-extra"> · WEEKDAY & WEEKEND BATCHES · 2026</span>
               {/* <span style={{ color: '#444' }}>•</span> */}
@@ -147,7 +163,7 @@ export default function Home() {
 
           {/* (5) & (6) BOTTOM ROW: Short Descriptor (bottom-left) and Primary CTA (bottom-right) */}
           <div className="hero-bottom-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', pointerEvents: 'auto' }}>
-            <div style={{ maxWidth: '320px' }}>
+            <div className="hidden md:block" style={{ maxWidth: '320px' }}>
               <span style={{ fontSize: '0.7rem', color: '#666', letterSpacing: '0.2em', textTransform: 'uppercase', display: 'block', marginBottom: '1rem' }}>LIMITED SEATS</span>
               <p style={{
                 color: '#888',
