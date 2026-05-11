@@ -5,9 +5,10 @@ import { Register } from "@/components/ui/register";
 // ─────────────────────────────────────────────
 // All copy / config lives here — edit freely
 // ─────────────────────────────────────────────
-export default function RegisterDemo() {
+export default function RegisterDemo({ referralCode }: { referralCode?: string }) {
   return (
     <Register
+      lockedReferralCode={referralCode}
       label="AI MASTERY PROGRAM 2026"
       title="Master AI & Build the Future"
       subtitle="Flexible Weekday and Weekend batches for Kids, College Students, and Professionals. Start your journey into Engineered Intelligence today."
@@ -34,7 +35,7 @@ export default function RegisterDemo() {
           sublabel: "Connect with us over call to discuss best time for your group.",
         },
       ]}
-      referralOptions={["Social Media", "School", "Friend", "Ads", "Other"]}
+      referralOptions={["Social Media", "School", "Friend", "Ads", "Affiliate", "Other"]}
       consentText="I agree to receive updates regarding the program"
       submitLabel="ENROLL IN PROGRAM"
       successMessage="🎉 Your request for registration is received! We'll contact you shortly."

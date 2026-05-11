@@ -27,6 +27,7 @@ export interface RegisterProps extends RegisterConfig {
     email: string;
     phone: string;
   };
+  lockedReferralCode?: string;
 }
 
 
@@ -121,6 +122,7 @@ function CustomDropdown({
   options,
   placeholder = "Select…",
   required,
+  disabled,
 }: {
   id: string;
   value: string;
@@ -128,6 +130,7 @@ function CustomDropdown({
   options: DropdownOption[];
   placeholder?: string;
   required?: boolean;
+  disabled?: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -147,16 +150,18 @@ function CustomDropdown({
       {/* Trigger */}
       <button
         type="button"
-        onClick={() => setOpen((p) => !p)}
+        disabled={disabled}
+        onClick={() => !disabled && setOpen((p) => !p)}
         style={{
           ...inputBase,
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          cursor: "pointer",
+          cursor: disabled ? "not-allowed" : "pointer",
           textAlign: "left",
           paddingRight: "0.5rem",
           color: selected ? "#fff" : "rgba(255,255,255,0.35)",
+          opacity: disabled ? 0.6 : 1,
         }}
       >
         <span style={{ fontFamily: "var(--font-inter)" }}>
@@ -549,6 +554,7 @@ export function Register({
   toastPrerequisite = DEFAULT_CONFIG.toastPrerequisite,
   contactInfo,
   onSubmit,
+  lockedReferralCode,
 }: RegisterProps) {
 
   const [form, setForm] = useState<RegisterFormData>(EMPTY_FORM);
@@ -558,6 +564,19 @@ export function Register({
     message: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLocked, setIsLocked] = useState(!!lockedReferralCode);
+
+  // Affiliate / Locked Referral Logic
+  useEffect(() => {
+    if (lockedReferralCode) {
+      setIsLocked(true);
+      setForm((p) => ({
+        ...p,
+        referralSource: "Affiliate",
+        referralName: lockedReferralCode,
+      }));
+    }
+  }, [lockedReferralCode]);
 
   const setField = (key: keyof RegisterFormData) =>
     (e: React.ChangeEvent<HTMLInputElement>) =>
@@ -601,6 +620,7 @@ export function Register({
         message: successMessage,
       });
       setForm(EMPTY_FORM);
+      setIsLocked(false);
     } catch (error: any) {
       setToast({
         show: true,
@@ -816,9 +836,14 @@ export function Register({
                 id="reg-referral"
                 value={form.referralSource}
                 onChange={(v) => setForm((p) => ({ ...p, referralSource: v, referralName: "" }))}
-                options={referralOptions.map((r) => ({ value: r, label: r }))}
+                options={
+                  isLocked 
+                    ? [{ value: "Affiliate", label: "Affiliate" }] 
+                    : referralOptions.map((r) => ({ value: r, label: r }))
+                }
                 placeholder="Select source"
                 required
+                disabled={isLocked}
               />
             </Field>
           </div>
@@ -835,12 +860,16 @@ export function Register({
                       ? "e.g. Tom Hanks"
                       : form.referralSource === "School"
                         ? "e.g. Teacher / School name"
-                        : form.referralSource === "Social Media"
-                          ? "e.g. @hekahub"
-                          : "Name or handle (optional)"
+                        : form.referralSource === "Affiliate"
+                          ? (isLocked ? "Partner Code Applied" : "Enter Affiliate Code")
+                          : form.referralSource === "Social Media"
+                            ? "e.g. @hekahub"
+                            : "Name or handle (optional)"
                   }
                   value={form.referralName || ""}
                   onChange={setField("referralName")}
+                  readOnly={isLocked}
+                  style={isLocked ? { color: "var(--color-accent)", opacity: 0.8, cursor: "not-allowed" } : {}}
                 />
               </Field>
             )}

@@ -24,7 +24,7 @@ const registerSchema = z.object({
   batchTiming: z.string().min(1).max(200).trim(),
   isTrial: z.boolean().default(false),
   trialSlot: z.string().optional().transform((v) => v?.trim() || ""),
-  referralSource: z.enum(["Social Media", "School", "Friend", "Ads", "Other"]),
+  referralSource: z.enum(["Social Media", "School", "Friend", "Ads", "Affiliate", "Other"]),
   referralName: z.string().max(100).optional().transform((v) => v?.trim() || ""),
   consentUpdates: z.literal(true),
   website: z.string().optional(), // Honeypot field

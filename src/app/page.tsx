@@ -8,7 +8,7 @@ import FAQDemo from "@/components/faq-demo";
 import ContactDemo from "@/components/contact-demo";
 import RegisterDemo from "@/components/register-demo";
 
-export default function Home() {
+export default function Home({ referralCode }: { referralCode?: string }) {
   return (
     <main>
       {/* 100vh HERO SECTION - NO SCROLL NEEDED */}
@@ -288,7 +288,7 @@ export default function Home() {
 
       {/* REGISTER SECTION */}
       <section id="register" className="container" style={{ paddingTop: '5rem', paddingBottom: '8rem' }}>
-        <RegisterDemo />
+        <RegisterDemo referralCode={referralCode} />
       </section>
 
       {/* FAQ SECTION */}
