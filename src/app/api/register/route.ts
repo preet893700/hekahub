@@ -13,10 +13,13 @@ const PROGRAM_LABELS: Record<string, string> = {
 };
 
 const registerSchema = z.object({
-  fullName: z.string().min(2, "Full name is not valid").max(100).trim(),
-  email: z.string().email("Email is not valid").max(200).toLowerCase().trim(),
-  countryCode: z.string().regex(/^\+\d{1,4}$/, "Country code is not valid"),
-  phone: z.string().min(10, "Phone number is not valid").max(15, "Phone number is not valid").regex(/^[\d\s\-\.\(\)]+$/, "Phone number is not valid"),
+  fullName: z.string().max(100).optional().transform((v) => v?.trim() || ""),
+  email: z.string().max(200).toLowerCase().optional().transform((v) => v?.trim() || ""),
+  countryCode: z.string().optional().transform((v) => v?.trim() || ""),
+  phone: z.string().max(15).optional().transform((v) => v?.trim() || ""),
+  studentEmail: z.string().max(200).toLowerCase().optional().transform((v) => v?.trim() || ""),
+  studentCountryCode: z.string().optional().transform((v) => v?.trim() || ""),
+  studentPhone: z.string().max(15).optional().transform((v) => v?.trim() || ""),
   city: z.string().max(100).optional().transform((v) => v?.trim() || ""),
   studentName: z.string().min(2, "Student name is not valid").max(100).trim(),
   ageGroup: z.string().min(1, "Age Group is not valid"),
@@ -74,9 +77,11 @@ export async function POST(req: NextRequest) {
   }
 
   // 5. Row Construction
+  const parentPhone = data.phone ? `${data.countryCode} ${data.phone}` : "";
+
   const row = [
     data.fullName,                          // 1. Parent's Full Name
-    `${data.countryCode} ${data.phone}`,     // 2. Phone Number
+    parentPhone,                            // 2. Phone Number
     data.email,                             // 3. Email Address
     data.city,                              // 4. City / Location
     data.studentName,                       // 5. Student's Full Name
@@ -87,6 +92,8 @@ export async function POST(req: NextRequest) {
     data.referralName,                      // 10. Referral Name
     data.isTrial ? "Yes" : "No",            // 11. Trial Requested
     data.trialSlot,                         // 12. Trial Slot
+    data.studentEmail,                      // 13. Student Email
+    data.studentPhone ? `${data.studentCountryCode} ${data.studentPhone}` : "", // 14. Student Phone
   ];
 
   // 6. Sheet Write

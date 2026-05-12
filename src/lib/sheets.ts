@@ -3,14 +3,7 @@ import { google } from "googleapis";
 // Module-level cache for auth client
 let cachedAuth: any = null;
 
-export async function appendRegistration(row: string[]): Promise<void> {
-  const spreadsheetId = process.env.SHEET_ID;
-
-  if (!spreadsheetId) {
-    console.error("DEBUG: SHEET_ID is missing from environment");
-    throw new Error("Configuration error: SHEET_ID is missing");
-  }
-
+async function getAuthClient() {
   const hasIndividualVars = process.env.GOOGLE_CLIENT_EMAIL && process.env.GOOGLE_PRIVATE_KEY;
   const hasJsonString = !!process.env.GOOGLE_SERVICE_ACCOUNT_JSON;
 
@@ -25,11 +18,7 @@ export async function appendRegistration(row: string[]): Promise<void> {
       let credentials;
 
       if (process.env.GOOGLE_CLIENT_EMAIL && process.env.GOOGLE_PRIVATE_KEY) {
-        // console.log("DEBUG: Using individual Google credentials");
-
         let privateKey = process.env.GOOGLE_PRIVATE_KEY;
-
-        // 1. Find the exact start and end of the PEM block to ignore extra quotes/junk
         const startMarker = "-----BEGIN PRIVATE KEY-----";
         const endMarker = "-----END PRIVATE KEY-----";
 
@@ -39,7 +28,6 @@ export async function appendRegistration(row: string[]): Promise<void> {
           privateKey = privateKey.substring(start, end);
         }
 
-        // 2. Robust newline replacement (handles \\n, \\\\n, etc.)
         privateKey = privateKey.replace(/\\+n/g, '\n').trim();
 
         credentials = {
@@ -48,8 +36,6 @@ export async function appendRegistration(row: string[]): Promise<void> {
           project_id: process.env.GOOGLE_PROJECT_ID?.trim().replace(/^["']|["']$/g, '') || "",
         };
       } else if (process.env.GOOGLE_SERVICE_ACCOUNT_JSON) {
-        // 2. Fallback to parsing the full JSON string if individual keys aren't set
-        // console.log("DEBUG: Falling back to JSON string parsing");
         let cleanedJson = process.env.GOOGLE_SERVICE_ACCOUNT_JSON.trim();
         if (cleanedJson.startsWith("'") && cleanedJson.endsWith("'")) {
           cleanedJson = cleanedJson.substring(1, cleanedJson.length - 1);
@@ -58,7 +44,6 @@ export async function appendRegistration(row: string[]): Promise<void> {
         try {
           credentials = JSON.parse(cleanedJson);
         } catch (e) {
-          // Final attempt for double-escaped strings
           if (cleanedJson.includes('\\"')) {
             const repaired = cleanedJson.replace(/\\"/g, '"').replace(/\\\\/g, '\\');
             credentials = JSON.parse(repaired);
@@ -84,12 +69,24 @@ export async function appendRegistration(row: string[]): Promise<void> {
     }
   }
 
-  const sheets = google.sheets({ version: "v4", auth: cachedAuth });
+  return cachedAuth;
+}
+
+export async function appendRegistration(row: string[]): Promise<void> {
+  const spreadsheetId = process.env.SHEET_ID;
+
+  if (!spreadsheetId) {
+    console.error("DEBUG: SHEET_ID is missing from environment");
+    throw new Error("Configuration error: SHEET_ID is missing");
+  }
+
+  const auth = await getAuthClient();
+  const sheets = google.sheets({ version: "v4", auth });
 
   try {
     await sheets.spreadsheets.values.append({
       spreadsheetId,
-      range: "Registrations!A:J", // Fixed: A to J matches your 10 columns
+      range: "Registrations!A:N", // Updated to A:N for 14 columns
       valueInputOption: "RAW",
       requestBody: {
         values: [row],
@@ -100,3 +97,59 @@ export async function appendRegistration(row: string[]): Promise<void> {
     throw error;
   }
 }
+
+export async function appendAffiliate(row: string[]): Promise<void> {
+  const spreadsheetId = process.env.SHEET_ID;
+
+  if (!spreadsheetId) {
+    throw new Error("Configuration error: SHEET_ID is missing");
+  }
+
+  const auth = await getAuthClient();
+  const sheets = google.sheets({ version: "v4", auth });
+
+  try {
+    await sheets.spreadsheets.values.append({
+      spreadsheetId,
+      range: "Affiliates!A:F",
+      valueInputOption: "RAW",
+      requestBody: {
+        values: [row],
+      },
+    });
+  } catch (error: any) {
+    console.error("Sheets API call failed:", error.message);
+    throw error;
+  }
+}
+
+export async function getAffiliateCoupons(): Promise<string[]> {
+  const spreadsheetId = process.env.SHEET_ID;
+
+  if (!spreadsheetId) {
+    console.error("DEBUG: SHEET_ID is missing from environment");
+    return [];
+  }
+
+  try {
+    const auth = await getAuthClient();
+    const sheets = google.sheets({ version: "v4", auth });
+
+    const response = await sheets.spreadsheets.values.get({
+      spreadsheetId,
+      range: "Affiliates!F:F", // Assuming CouponCode is the 6th column (A=1, B=2, C=3, D=4, E=5, F=6)
+    });
+
+    const rows = response.data.values;
+    if (!rows || rows.length === 0) {
+      return [];
+    }
+
+    // Return all values from column F, excluding the header (index 0) if it exists, and empty rows.
+    return rows.map((row) => row[0]).filter((code) => typeof code === 'string' && code.trim().length > 0);
+  } catch (error: any) {
+    console.error("Failed to fetch affiliate coupons:", error.message);
+    return [];
+  }
+}
+

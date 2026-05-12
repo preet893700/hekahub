@@ -70,9 +70,38 @@ export default function RegisterDemo({ referralCode }: { referralCode?: string }
               errorMessage = err.error ?? errorMessage;
             }
           } catch (e) {
-            // If JSON parsing fails, it's likely an HTML error page from the server
             const text = await res.text();
             console.error("Server returned non-JSON response:", text);
+            errorMessage = `Server Error (${res.status}): Please check if the API route is working.`;
+          }
+          throw new Error(errorMessage);
+        }
+      }}
+      onAffiliateSubmit={async (data) => {
+        const res = await fetch("/api/affiliate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            ...data,
+            website: "", // honeypot
+          }),
+        });
+
+        if (!res.ok) {
+          let errorMessage = "Affiliate Registration failed";
+          try {
+            const err = await res.json();
+            if (err.details?.fieldErrors) {
+              const firstField = Object.keys(err.details.fieldErrors)[0];
+              if (firstField && err.details.fieldErrors[firstField].length > 0) {
+                errorMessage = err.details.fieldErrors[firstField][0];
+              } else {
+                errorMessage = err.error ?? errorMessage;
+              }
+            } else {
+              errorMessage = err.error ?? errorMessage;
+            }
+          } catch (e) {
             errorMessage = `Server Error (${res.status}): Please check if the API route is working.`;
           }
           throw new Error(errorMessage);
